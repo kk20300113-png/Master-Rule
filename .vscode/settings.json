@@ -1,0 +1,24 @@
+{
+  // .vscode/settings.json
+  // Place this file at: your-project/.vscode/settings.json
+  // This makes VS Code's AI chat features aware of your master rules.
+  //
+  // WHAT THIS DOES:
+  // Injects a standing instruction into VS Code's GitHub Copilot Chat
+  // and compatible AI extensions so they reference your rules.
+  // Note: This is a pointer, not a full auto-fire. The agent will be
+  // reminded of your rules framework but you still use the opening
+  // ritual for full activation.
+
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "text": "At the start of every conversation, read the file MASTER_RULES.md in the project root and output the CONFIRMATION PHRASE defined at the top of that file before responding to any task. Apply all rules in MASTER_RULES.md throughout this session. If MASTER_RULES.md is not in the project root, state: 'MASTER_RULES.md not found — please add it to project root.' Key rules to always follow: (1) No code without a 3-sentence plan first. (2) No secrets or API keys in any file. (3) Warn at 70% context. (4) Always update Plans.md at session end. (5) Run client check before any client-facing output."
+    }
+  ],
+
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "text": "When reviewing code, apply the security rules from MASTER_RULES.md: check for exposed secrets, missing tests, force-push patterns, and unvetted dependencies. Flag any violation before suggesting improvements."
+    }
+  ]
+}
