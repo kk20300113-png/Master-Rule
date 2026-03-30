@@ -474,7 +474,7 @@ If not — it is not ready. Revise before presenting.
 ```
 INSTALLATION STATUS — check at each session start
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ECC (everything-claude-code) : [INSTALLED / NOT INSTALLED]
+ECC (everything-claude-code) : INSTALLED
 Claude Code Harness           : [INSTALLED / NOT INSTALLED]
 CC-Switch                     : [INSTALLED / NOT INSTALLED]
 Plans.md in project root      : [EXISTS / CREATING NOW]
