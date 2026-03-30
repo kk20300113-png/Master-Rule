@@ -64,11 +64,32 @@ apply their principles in every session, every task, every decision.
 - **Verified**: ~100K+ stars, March 2026. Anthropic hackathon winner.
 - **What it contains**: 28 specialized agents, 125+ skills, security
   scanner (AgentShield), memory persistence hooks, token optimization
-- **Install command** (run once in Claude Code terminal):
+- **Install Methods**:
+
+  **Option A: Plugin Install (Requires Claude Code v2.1.0+ with plugin support)**
   ```
   /plugin marketplace add affaan-m/everything-claude-code
   /plugin install everything-claude-code@everything-claude-code
   ```
+  
+  **Option B: Manual Install (Universal - works with all Claude Code versions)**
+  ```bash
+  # 1. Clone the repository
+  git clone https://github.com/affaan-m/everything-claude-code.git
+  cd everything-claude-code
+  
+  # 2. Install dependencies
+  npm install
+  
+  # 3. Run installer (Windows PowerShell)
+  .\install.ps1 --profile full
+  
+  # Or for specific languages only:
+  # .\install.ps1 typescript python golang
+  ```
+- **Post-Install Security Check**: Run `npx ecc-agentshield scan` to verify installation
+- **Expected Grade**: F on fresh install (normal) due to placeholder API keys in MCP configs
+- **To Fix**: Replace "YOUR_*" placeholders in `~/.claude/mcp-configs/mcp-servers.json` with actual API keys
 - **Principles to apply in EVERY session** (whether ECC is installed or not):
   - TDD discipline: write the test skeleton BEFORE any implementation code
   - Strategic compact: suggest /compact at logical breakpoints, not just
@@ -83,7 +104,7 @@ apply their principles in every session, every task, every decision.
 #### ECC — AgentShield Security Scanner
 - **What it is**: A security scanner embedded inside ECC with 1,282 tests
   and 102 static analysis rules
-- **Run anytime with**: `npx ecc-agentshield scan`
+- **Run anytime with**: `npx ecc-agentshield scan` (add `--fix` for auto-fix where possible)
 - **Run before**: any deployment, any client share, any PR creation
 - **Principles to apply always** (even without ECC installed):
   - Zero tolerance for API keys, tokens, or passwords in committed files
