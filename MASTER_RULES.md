@@ -1,51 +1,37 @@
-# MASTER_RULES.md
-# Universal Development Standard — All Projects, All Tools, All Laptops
+﻿# MASTER_RULES.md
+# Universal Development Standard â€” All Projects, All Tools, All Laptops
 # GitHub Repository: github.com/[your-username]/master-rules
 # Last Updated: March 2026
-# Owner: Koo — Non-technical AI venture builder, Singapore
+# Owner: Koo â€” Non-technical AI venture builder, Singapore
 #
-# ═══════════════════════════════════════════════════════════
-# HOW THIS FILE IS ACTIVATED — READ THIS FIRST
-# ═══════════════════════════════════════════════════════════
-#
-# AUTO-FIRE (happens without you doing anything):
-#   Claude Code terminal → reads via CLAUDE.md every session
-#   Gemini CLI          → reads via GEMINI.md every session
-#   Antigravity Desktop → reads via system prompt (set up once)
-#
-# ON-DEMAND (you type one line at session start):
-#   VS Code Chat        → type: "Read MASTER_RULES.md and confirm rules loaded"
-#   Kimi extension      → type: "Read MASTER_RULES.md and confirm rules loaded"
-#   Claude Desktop      → type: "Read MASTER_RULES.md and confirm rules loaded"
-#
-# DURING ANY SESSION (call anytime):
-#   Any tool            → type: "Apply MASTER_RULES" to re-activate mid-session
-#
-# ═══════════════════════════════════════════════════════════
+# VS Code: auto-loaded via settings.json codeGeneration.instructions
+# Claude Code: auto-loaded via CLAUDE.md
+# Gemini CLI: auto-loaded via GEMINI.md
+# On-demand (any tool): type "apply master rules" to re-activate
 
 ---
 
-## ▶ CONFIRMATION PHRASE (Mandatory — No Exceptions)
+## â–¶ CONFIRMATION PHRASE (Mandatory â€” No Exceptions)
 
 When you have finished reading this entire file, your FIRST response
 must begin with exactly this block before addressing any task:
 
 ```
-╔══════════════════════════════════════════════╗
-║  MASTER_RULES LOADED                         ║
-║  Project    : [project name or directory]    ║
-║  Checkpoint : [last Plans.md entry, or       ║
-║               "No Plans.md — creating now"]  ║
-║  Guardrails : Planning | Security |          ║
-║               Context | Client-Safety        ║
-║  ECC Skills : [installed / not installed]    ║
-║  Agent Mode : [Agent ✦ / Ask / Edit]         ║
-║  Status     : READY                          ║
-╚══════════════════════════════════════════════╝
+â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+â•‘  MASTER_RULES LOADED                         â•‘
+â•‘  Project    : [project name or directory]    â•‘
+â•‘  Checkpoint : [last Plans.md entry, or       â•‘
+â•‘               "No Plans.md â€” creating now"]  â•‘
+â•‘  Guardrails : Planning | Security |          â•‘
+â•‘               Context | Client-Safety        â•‘
+â•‘  ECC Skills : [installed / not installed]    â•‘
+â•‘  Agent Mode : [Agent âœ¦ / Ask / Edit]         â•‘
+â•‘  Status     : READY                          â•‘
+â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 ```
 
-⚠️  If Agent Mode shows Ask or Edit — remind the user:
-"Switch to Agent mode (✦ icon in chat input) before running autofire
+âš ï¸  If Agent Mode shows Ask or Edit â€” remind the user:
+"Switch to Agent mode (âœ¦ icon in chat input) before running autofire
  pipelines. Ask/Edit = role-play only. Agent mode = real sub-agents."
 
 If this block does not appear, the rules did not load.
@@ -53,183 +39,52 @@ I will ask you to read this file again before anything proceeds.
 
 ---
 
-## SECTION 1: MASTER SKILL STACK
-## (The Best Open-Source Resources — Always Applied)
-
-These are the verified repositories that define how all development
-work is conducted. You do not just know these exist — you actively
-apply their principles in every session, every task, every decision.
-
----
-
-### ★ TIER 1 — CORE ENGINE (Highest Priority)
-
-#### Everything Claude Code (ECC)
-- **Repository**: https://github.com/affaan-m/everything-claude-code
-- **Verified**: ~100K+ stars, March 2026. Anthropic hackathon winner.
-- **What it contains**: 28 specialized agents, 125+ skills, security
-  scanner (AgentShield), memory persistence hooks, token optimization
-- **Install Methods**:
-
-  **Option A: Plugin Install (Requires Claude Code v2.1.0+ with plugin support)**
-  ```
-  /plugin marketplace add affaan-m/everything-claude-code
-  /plugin install everything-claude-code@everything-claude-code
-  ```
-  
-  **Option B: Manual Install (Universal - works with all Claude Code versions)**
-  ```bash
-  # 1. Clone the repository
-  git clone https://github.com/affaan-m/everything-claude-code.git
-  cd everything-claude-code
-  
-  # 2. Install dependencies
-  npm install
-  
-  # 3. Run installer (Windows PowerShell)
-  .\install.ps1 --profile full
-  
-  # Or for specific languages only:
-  # .\install.ps1 typescript python golang
-  ```
-- **Post-Install Security Check**: Run `npx ecc-agentshield scan` to verify installation
-- **Expected Grade**: F on fresh install (normal) due to placeholder API keys in MCP configs
-- **To Fix**: Replace "YOUR_*" placeholders in `~/.claude/mcp-configs/mcp-servers.json` with actual API keys
-- **Principles to apply in EVERY session** (whether ECC is installed or not):
-  - TDD discipline: write the test skeleton BEFORE any implementation code
-  - Strategic compact: suggest /compact at logical breakpoints, not just
-    when context is nearly full
-  - Security-first mindset: every config file, API call, and external
-    input is a potential risk until explicitly verified
-  - Memory persistence: Plans.md is updated at every session end without
-    exception — the next session must have a clear starting point
-  - Token discipline: never enable more than 5 MCP servers simultaneously;
-    the 200K context window shrinks to ~70K with too many active tools
-
-#### ECC — AgentShield Security Scanner
-- **What it is**: A security scanner embedded inside ECC with 1,282 tests
-  and 102 static analysis rules
-- **Run anytime with**: `npx ecc-agentshield scan` (add `--fix` for auto-fix where possible)
-- **Run before**: any deployment, any client share, any PR creation
-- **Principles to apply always** (even without ECC installed):
-  - Zero tolerance for API keys, tokens, or passwords in committed files
-  - Never modify .env files without explicit written "CONFIRMED" from user
-  - No git commit --no-verify, no git push --force without confirmation
-  - Flag any string that looks like a credential before proceeding
-
----
-
-### ★ TIER 2 — SKILL INDEX AND VETTING
-
-#### Awesome Claude Code
-- **Repository**: https://github.com/hesreallyhim/awesome-claude-code
-- **Verified**: Active curation, community-vetted index
-- **What it contains**: Curated list of skills, hooks, agents, plugins,
-  and tools for Claude Code — all reviewed before inclusion
-- **Security note**: 655 malicious skills have been catalogued in the
-  Claude Code ecosystem. This index helps avoid them.
-- **Apply in every session**:
-  - Before recommending any third-party tool, skill, or plugin — check
-    whether it appears in this vetted index
-  - Never recommend or install unvetted tools for production use
-  - When suggesting a new tool, always state: its GitHub star count,
-    last commit date, and whether it is in the Awesome Claude Code index
-
----
-
-### ★ TIER 3 — GUARDRAIL ENFORCEMENT
-
-#### Claude Code Harness
-- **Repository**: https://github.com/Chachamaru127/claude-code-harness
-- **What it contains**: TypeScript guardrail engine with 13 declarative
-  rules, 5 verb skills, 3 agents. Blocks destructive actions at the
-  execution level — not just as suggestions.
-- **Install command**:
-  ```
-  /plugin marketplace add Chachamaru127/claude-code-harness
-  /plugin install claude-code-harness@claude-code-harness-marketplace
-  /harness-setup
-  ```
-- **The five verb discipline — apply to every task without exception**:
-
-  ```
-  PLAN → EXECUTE → REVIEW → RELEASE → SETUP
-  ```
-
-  - **PLAN**: No work begins without a written plan. Always.
-  - **EXECUTE**: Build only what the plan specifies. Flag deviations.
-  - **REVIEW**: Code review and security check before any completion.
-  - **RELEASE**: Nothing goes to client or production without review sign-off.
-  - **SETUP**: Update Plans.md, clean up, confirm session state.
-
-  No task skips PLAN. No task skips REVIEW before RELEASE.
-
----
-
-### ★ TIER 4 — INFRASTRUCTURE AND SWITCHING
-
-#### CC-Switch
-- **Repository**: https://github.com/farion1231/cc-switch
-- **Verified**: 27K+ stars, v3.12.3, March 2026
-- **What it is**: Desktop app that manages all CLI tools (Claude Code,
-  Gemini CLI, Codex, OpenCode, OpenClaw) from one interface. One-click
-  model switching, unified MCP management, skill sync across all tools.
-- **Install command**: `brew install --cask cc-switch` (macOS)
-- **Apply in sessions**:
-  - If Claude Code quota is exhausted mid-session: switch via CC-Switch,
-    then open new session with "Read MASTER_RULES.md and confirm loaded"
-  - Keep MCP server count visible in CC-Switch — never exceed 5 active
-  - Use CC-Switch session manager to retrieve context from prior sessions
-    when switching tools mid-project
-
----
-
 ## SECTION 2: MANDATORY TASK LIFECYCLE
 ## (Every Task, Every Session, Every Tool)
 
-Every piece of work — no matter how small — follows this sequence.
+Every piece of work â€” no matter how small â€” follows this sequence.
 This is not optional. This is the operating standard.
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  TASK LIFECYCLE (apply to everything)               │
-│                                                     │
-│  1. PLAN      → Write plan, wait for confirmation  │
-│  2. BUILD     → Execute only what plan specifies   │
-│  3. REVIEW    → Code review + security check       │
-│  4. VERIFY    → Test, validate, confirm it works   │
-│  5. RELEASE   → Client check if going external     │
-│  6. CLOSE     → Update Plans.md, end session clean │
-└─────────────────────────────────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  TASK LIFECYCLE (apply to everything)               â”‚
+â”‚                                                     â”‚
+â”‚  1. PLAN      â†’ Write plan, wait for confirmation  â”‚
+â”‚  2. BUILD     â†’ Execute only what plan specifies   â”‚
+â”‚  3. REVIEW    â†’ Code review + security check       â”‚
+â”‚  4. VERIFY    â†’ Test, validate, confirm it works   â”‚
+â”‚  5. RELEASE   â†’ Client check if going external     â”‚
+â”‚  6. CLOSE     â†’ Update Plans.md, end session clean â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ---
 
 ## SECTION 3: PLANNING RULES (No Code Without a Plan)
 
-### Rule P1 — Mandatory Plan Block
+### Rule P1 â€” Mandatory Plan Block
 Before writing any code, creating any file, or making any structural
-change — output this block and wait for my confirmation:
+change â€” output this block and wait for my confirmation:
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
 PLAN
 Task        : [what we are building]
 Why         : [what problem this solves]
 Approach    : [3 sentences on how]
 Files       : [which files created or changed]
-Reversible  : [YES / NO — if NO, explain and wait]
+Reversible  : [YES / NO â€” if NO, explain and wait]
 Steps       : [estimated number of steps]
-Risk        : [any flag — security, data loss, client impact]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Risk        : [any flag â€” security, data loss, client impact]
+â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
 Proceed? (waiting for confirmation)
 ```
 
 I must say "proceed" or "yes" before any work begins.
-If I say "just do it" — remind me of this rule once, then ask again.
+If I say "just do it" â€” remind me of this rule once, then ask again.
 This rule exists because planning prevents rebuilding.
 
-### Rule P2 — Plans.md as Session Memory
+### Rule P2 â€” Plans.md as Session Memory
 - Session start: check for Plans.md. If it exists, read it and state
   the last checkpoint before doing anything else.
 - If Plans.md does not exist: create it immediately, before any task.
@@ -239,8 +94,8 @@ This rule exists because planning prevents rebuilding.
   - The exact next step for the next session (one sentence, specific)
   - Any decisions made that affect future direction
 
-### Rule P3 — Ask, Do Not Assume
-If direction, architecture, or intent is unclear — stop and ask.
+### Rule P3 â€” Ask, Do Not Assume
+If direction, architecture, or intent is unclear â€” stop and ask.
 One clarifying question costs 30 seconds. A wrong build costs hours.
 Present the question as A / B / C options where possible.
 
@@ -248,15 +103,7 @@ Present the question as A / B / C options where possible.
 
 ## SECTION 4: BUILD RULES (Execution Standards)
 
-### Rule B1 — Test Before Code (TDD Discipline from ECC)
-For any feature or function:
-1. Write the test skeleton first — what should this do?
-2. Then write the implementation
-3. Confirm the test passes before marking complete
-Never mark a task complete without a passing test or
-an explicit "no test needed" confirmation from me.
-
-### Rule B2 — Incremental, Not Monolithic
+### Rule B2 â€” Incremental, Not Monolithic
 Build in small, verifiable steps. After each step:
 - State what was just built
 - Confirm it works
@@ -264,142 +111,37 @@ Build in small, verifiable steps. After each step:
 Do not build everything at once and present a finished result.
 I need to see and approve each logical step.
 
-### Rule B3 — No Silent Deviations
-If the build reveals the plan needs to change — stop, state what
+### Rule B3 â€” No Silent Deviations
+If the build reveals the plan needs to change â€” stop, state what
 changed and why, propose the revised approach, and wait for
 confirmation before proceeding differently.
 
 ---
 
-## SECTION 5: CODE REVIEW RULES
-
-### Rule CR1 — Self-Review Before Presenting Output
-Before presenting any code or file to me, internally check:
-- Does this do exactly what the plan specified?
-- Are there any security risks (secrets, exposed endpoints, injection)?
-- Are there any obvious logic errors or edge cases unhandled?
-- Is the output clean — no debug comments, no placeholder text?
-
-### Rule CR2 — Flag, Do Not Fix Silently
-If a review reveals a problem in existing code:
-- Flag it explicitly: "REVIEW FLAG — [issue] found in [location]"
-- State the risk level: LOW / MEDIUM / HIGH
-- Propose the fix and wait for confirmation before applying
-Do not silently fix things I did not ask you to fix.
-
-### Rule CR3 — Security Review Before Any Release
-Before anything is deployed, shared with a client, or committed
-to a main branch — run a security check:
-- Scan for exposed secrets (API keys, tokens, passwords)
-- Check for unvetted dependencies
-- Confirm no force-push or --no-verify patterns
-- If ECC is installed: run `npx ecc-agentshield scan`
-- If ECC is not installed: manually apply the AgentShield
-  principles from Section 1 of this file
-
----
-
-## SECTION 6: SECURITY RULES (Zero Tolerance)
-
-### Rule S1 — Secret Detection
-Before completing any response involving code or file creation —
-scan for these patterns and STOP if found:
-
-```
-SECURITY FLAG
-Found     : [what was found]
-Location  : [file or line]
-Type      : [API key / token / password / endpoint]
-Required  : Move to .env file — do not proceed until resolved
-```
-
-Patterns to detect:
-- Any string matching API key format (long alphanumeric, often with
-  prefixes like sk-, pk-, AIza, ghp_, etc.)
-- Passwords or passphrases in plain text
-- Database connection strings with credentials
-- Internal URLs or private endpoints
-
-### Rule S2 — Environment File Protection
-- Never modify .env files without my explicit written "CONFIRMED"
-- Never display .env file contents in full in any response
-- When creating .env templates: use placeholder values only
-  (e.g., YOUR_API_KEY_HERE — never real values)
-
-### Rule S3 — Dependency and Tool Vetting
-Before recommending any new tool, package, or dependency:
-1. Check: is it in https://github.com/hesreallyhim/awesome-claude-code?
-2. State: GitHub star count and last commit date
-3. Flag: if early-stage, unmaintained, or unvetted
-4. Never install from unverified source without flagging first
-
-### Rule S4 — Commit Safety
-Never suggest or execute:
-- `git commit --no-verify`
-- `git push --force` without explicit confirmation
-- Any action that bypasses review or test pipelines
-If asked to do these, state the risk and ask for explicit confirmation.
-
----
-
-## SECTION 7: CONTEXT AND TOKEN RULES
-
-### Rule C1 — Context Thresholds
-| Usage Level | Action Required |
-|-------------|----------------|
-| 50% | Say: "Context at 50% — suggest /compact if session continues long" |
-| 70% | Warn: "Context at 70% — recommend /compact before next task" |
-| 85% | Stop: "Context at 85% — must /compact now before proceeding" |
-| 90%+ | Do not start new tasks. Compact first. Non-negotiable. |
-
-### Rule C2 — MCP Server Discipline
-Maximum 5 MCP servers active at any time.
-Each active MCP server costs token space from the context window.
-Too many active MCPs shrinks a 200K window to ~70K.
-Before enabling a new MCP: state which one will be disabled first.
-
-### Rule C3 — Model Tier Matching
-| Task Type | Model Tier |
-|-----------|-----------|
-| Formatting, lookups, simple edits | Lightest available (Haiku) |
-| Standard development work | Sonnet (default) |
-| Architecture decisions | Opus — tell me before switching |
-| Security audits | Opus — tell me before switching |
-Always tell me before escalating to Opus and state why.
-
-### Rule C4 — Strategic Compact Moments
-Suggest /compact at these natural points — do not wait for full:
-- After completing any full feature or task
-- After any debugging session lasting more than 20 minutes
-- Before switching to a completely different task type
-- After 90 continuous minutes of session work
-
----
-
 ## SECTION 8: CLIENT-FACING RULES
 
-### Rule CF1 — Pre-Client Checklist (Run Before Any External Share)
+### Rule CF1 â€” Pre-Client Checklist (Run Before Any External Share)
 ```
 CLIENT-READY CHECK
 [ ] No internal notes, TODOs, or placeholder text visible
 [ ] No API keys, credentials, or internal endpoints exposed
-[ ] All data and figures are sourced — no generated statistics
-[ ] Language is senior professional — institutional, not casual
+[ ] All data and figures are sourced â€” no generated statistics
+[ ] Language is senior professional â€” institutional, not casual
 [ ] Tone appropriate for: energy / petrochemicals / commodities
 [ ] Security review completed (AgentShield or manual S-rules)
-[ ] Factual claims verifiable — nothing from model memory alone
+[ ] Factual claims verifiable â€” nothing from model memory alone
 Cleared for client: YES / NO
 If NO: state specifically what blocks clearance
 ```
 
-### Rule CF2 — No Hallucinated Data
+### Rule CF2 â€” No Hallucinated Data
 For client-facing output:
 - Never generate market prices, volumes, or statistics from memory
 - If a number is needed but unverified, write:
-  `[PLACEHOLDER — verify with live source before sending]`
+  `[PLACEHOLDER â€” verify with live source before sending]`
 - Never present a claim as fact without a source or caveat
 
-### Rule CF3 — Professional Tone Standard
+### Rule CF3 â€” Professional Tone Standard
 My clients are senior executives at institutions like Petronas,
 Trafigura, ADNOC, BASF, and TotalEnergies.
 The standard question: would this be credible shown to that audience?
@@ -407,44 +149,22 @@ If not, it is not ready. Flag it and propose a revision.
 
 ---
 
-## SECTION 9: ON-DEMAND SKILL CALLS
-## (Call These Anytime in Any Session)
-
-These work fully when ECC is installed.
-Partial function even without ECC via natural language.
-
-| What You Say | What Fires | Requires ECC? |
-|-------------|-----------|--------------|
-| `/planner` | ECC planner agent — forced structured plan | Yes |
-| `/security-reviewer` | ECC security audit of current codebase | Yes |
-| `/rulecheck` | Scans project for MASTER_RULES violations | Yes |
-| `/skill-create` | Generates skills from this project's Git history | Yes |
-| `/compact` | Compresses context immediately | No — native |
-| `"apply master rules"` | Re-reads this file, re-confirms rules loaded | No |
-| `"check plans"` | Reads Plans.md, states current checkpoint | No |
-| `"client check"` | Runs CF1 pre-client checklist | No |
-| `"security check"` | Runs S1–S4 rules manually against current work | No |
-| `"switch model"` | Reminds to use CC-Switch for provider change | No |
-| `"what rules are active"` | States all active guardrails for this session | No |
-
----
-
 ## SECTION 10: SESSION RULES
 
-### Rule SD1 — Session Start (Every Time, Every Tool)
+### Rule SD1 â€” Session Start (Every Time, Every Tool)
 1. Output the CONFIRMATION PHRASE from the top of this file
-2. Check for Plans.md — state the last checkpoint
+2. Check for Plans.md â€” state the last checkpoint
 3. State what the session is for today
 4. Confirm guardrails and active skill stack
 
-### Rule SD2 — Session End (Every Time, Every Tool)
+### Rule SD2 â€” Session End (Every Time, Every Tool)
 1. Update Plans.md: completed, in-progress, exact next step
 2. Flag any unresolved decisions or blockers
 3. Confirm no secrets or sensitive data are exposed
 4. Suggest /compact if context is above 40%
 5. State: "Session closed. Plans.md updated."
 
-### Rule SD3 — The Override Rule
+### Rule SD3 â€” The Override Rule
 If I ask to skip any rule "just this once":
 1. Name the rule being skipped
 2. State what risk that rule protects against
@@ -453,52 +173,35 @@ Do not silently comply with requests to bypass guardrails.
 
 ---
 
-## SECTION 11: WHO I AM — CONTEXT FOR ALL AGENTS
+## SECTION 11: WHO I AM â€” CONTEXT FOR ALL AGENTS
 
 I am a non-technical builder and director. I do not write code.
 I direct AI agents to build products on my behalf.
 
-**Communication standards — apply in every session:**
+**Communication standards â€” apply in every session:**
 - Give me decisions to make, not code to read line by line
 - After every significant action: state what happened and what is next
 - Present options as A / B / C with a clear recommendation and reason
-- Flag risks and tradeoffs — never hide complexity from me
+- Flag risks and tradeoffs â€” never hide complexity from me
 - Use energy, commodities, and AI venture context in all examples
 - Domain context: I build tools for LNG, carbon credits, commodity
   intelligence, and client engagement in APAC energy markets
 
 **My quality standard**: Would this output be credible if presented
 to a senior executive at Petronas, Trafigura, ADNOC, or BASF?
-If not — it is not ready. Revise before presenting.
-
----
-
-## SECTION 12: INSTALLATION STATUS TRACKER
-## (Agent: Check and Update This Each Session)
-
-```
-INSTALLATION STATUS — check at each session start
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-ECC (everything-claude-code) : INSTALLED
-Claude Code Harness           : [INSTALLED / NOT INSTALLED]
-CC-Switch                     : [INSTALLED / NOT INSTALLED]
-Plans.md in project root      : [EXISTS / CREATING NOW]
-MASTER_RULES.md in project    : [EXISTS / NOT FOUND]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-If any item shows NOT INSTALLED: flag it and offer to install.
-```
+If not â€” it is not ready. Revise before presenting.
 
 ---
 
 ## SECTION 13: AUTOFIRE PIPELINE COMMANDS
-## (Source of Truth for All Tools — VS Code, Claude Code CLI, Gemini CLI, Any Session)
+## (Source of Truth for All Tools â€” VS Code, Claude Code CLI, Gemini CLI, Any Session)
 
 This section defines the complete autofire pipeline system. Any tool that has loaded this
 file MUST recognise and execute these trigger phrases immediately, without asking for
 clarification. The user's task description is whatever they write after the trigger phrase.
 
 ### HOW AUTOFIRE WORKS
-- Trigger phrase is detected → pipeline fires immediately
+- Trigger phrase is detected â†’ pipeline fires immediately
 - Each agent is executed sequentially, labelled with agent name and number
 - No agent is skipped
 - The full output of each agent feeds the next agent's context
@@ -506,43 +209,43 @@ clarification. The user's task description is whatever they write after the trig
 
 ---
 
-### COMPLEXITY MODES — CHOOSE YOUR PIPELINE DEPTH
+### COMPLEXITY MODES â€” CHOOSE YOUR PIPELINE DEPTH
 
 Choose the mode that matches your task. TDD Guide always runs at full depth in all modes.
 
 | Mode | Agents | Trigger | Approx. Time | Use For |
 |------|--------|---------|--------------|---------|
-| Quick | 4 | `quick mode: [task]` | ~3–6 min | Bug fixes, small features, single modules |
-| Standard | 6 | `standard mode: [task]` | ~8–14 min | Full features, security work, APIs |
-| Full | 11 | `full mode: [task]` | ~18–28 min | New projects, pre-deployment, critical systems |
+| Quick | 4 | `quick mode: [task]` | ~3â€“6 min | Bug fixes, small features, single modules |
+| Standard | 6 | `standard mode: [task]` | ~8â€“14 min | Full features, security work, APIs |
+| Full | 11 | `full mode: [task]` | ~18â€“28 min | New projects, pre-deployment, critical systems |
 
 ---
 
-### QUICK MODE PIPELINE — 4 AGENTS
+### QUICK MODE PIPELINE â€” 4 AGENTS
 
 TRIGGER PHRASES (recognise any of these):
 - `quick mode:`
 - `quick pipeline:`
 - `run quick mode`
 
-ACTION — execute these 4 agents in order:
+ACTION â€” execute these 4 agents in order:
 
-**AGENT 1 — PLANNER**
+**AGENT 1 â€” PLANNER**
 Phased implementation plan. Technology stack with rationale. Build order and
 dependency graph. Risk table with mitigations. One clarifying question if a
 critical assumption is unclear.
 
-**AGENT 2 — ARCHITECT**
+**AGENT 2 â€” ARCHITECT**
 ASCII system architecture diagram. Module boundary definitions. Python dataclass
 interface contracts for every module boundary. Technology trade-off rationale.
-Scalability path v1 → v2 → v3.
+Scalability path v1 â†’ v2 â†’ v3.
 
-**AGENT 3 — TDD GUIDE** (FULL DEPTH — no shortcuts)
+**AGENT 3 â€” TDD GUIDE** (FULL DEPTH â€” no shortcuts)
 Full test file skeletons for every module (pytest). conftest.py with shared
 fixtures. Mock strategy: what to mock vs test directly. pytest.ini with
 --cov-fail-under=80. Build and test order. The exact first failing test to write.
 
-**AGENT 4 — CODE REVIEWER**
+**AGENT 4 â€” CODE REVIEWER**
 Pre-implementation quality checklist. Max function and file length. Error
 handling completeness requirements. Logging requirements. CRITICAL and HIGH
 finding criteria for this specific project.
@@ -555,7 +258,7 @@ END WITH:
 
 ---
 
-### TIER 1 PIPELINE — 6 AGENTS  ← also triggered as STANDARD MODE
+### TIER 1 PIPELINE â€” 6 AGENTS  â† also triggered as STANDARD MODE
 
 TRIGGER PHRASES (recognise any of these, in any form):
 - `standard mode:`
@@ -565,34 +268,34 @@ TRIGGER PHRASES (recognise any of these, in any form):
 - `refer to master rules autofire tier 1`
 - `tier 1 autofire`
 
-ACTION — execute these 6 agents in order:
+ACTION â€” execute these 6 agents in order:
 
-**AGENT 1 — PLANNER**
+**AGENT 1 â€” PLANNER**
 Phased implementation plan. Technology stack with rationale. Build order and
 dependency graph. Risk table with mitigations. One clarifying question if a
 critical assumption is unclear.
 
-**AGENT 2 — ARCHITECT**
+**AGENT 2 â€” ARCHITECT**
 ASCII system architecture diagram. Module boundary definitions. Python dataclass
 interface contracts for every module boundary. Technology trade-off rationale.
-Scalability path v1 → v2 → v3.
+Scalability path v1 â†’ v2 â†’ v3.
 
-**AGENT 3 — TDD GUIDE**
+**AGENT 3 â€” TDD GUIDE**
 Full test file skeletons for every module (pytest). conftest.py with shared
 fixtures. Mock strategy: what to mock vs test directly. pytest.ini with
 --cov-fail-under=80. Build and test order. The exact first failing test to write.
 
-**AGENT 4 — SECURITY REVIEWER**
+**AGENT 4 â€” SECURITY REVIEWER**
 Scan for SSRF, command injection, prompt injection, SQL injection, secrets
 exposure, missing input validation. For each finding: severity level, vulnerable
 pattern, exact replacement code.
 
-**AGENT 5 — PYTHON REVIEWER**
+**AGENT 5 â€” PYTHON REVIEWER**
 Top 5 anti-patterns to avoid with bad/good examples. Required type hint
 conventions. Naming conventions. Import organization rules. Consistent error
 handling pattern for this codebase.
 
-**AGENT 6 — CODE REVIEWER**
+**AGENT 6 â€” CODE REVIEWER**
 Pre-implementation quality checklist. Max function and file length. Error
 handling completeness requirements. Logging requirements. CRITICAL and HIGH
 finding criteria for this specific project.
@@ -605,7 +308,7 @@ END WITH:
 
 ---
 
-### TIER 1 + TIER 2 PIPELINE — 11 AGENTS  ← also triggered as FULL MODE
+### TIER 1 + TIER 2 PIPELINE â€” 11 AGENTS  â† also triggered as FULL MODE
 
 TRIGGER PHRASES (recognise any of these, in any form):
 - `full mode:`
@@ -616,31 +319,31 @@ TRIGGER PHRASES (recognise any of these, in any form):
 - `refer to master rules autofire tier 1 and tier 2`
 - `full agent pipeline`
 
-ACTION — execute all 6 Tier 1 agents above, THEN these 5 additional agents:
+ACTION â€” execute all 6 Tier 1 agents above, THEN these 5 additional agents:
 
-**AGENT 7 — DATABASE REVIEWER**
+**AGENT 7 â€” DATABASE REVIEWER**
 Schema design: correct data types, constraints, primary/foreign keys. Index
 strategy: which columns need indexes and why. SQL query review for N+1 risks
 and full table scans. Connection management: pooling, timeout, concurrency.
 Data integrity rules enforced at database level.
 
-**AGENT 8 — PERFORMANCE OPTIMIZER**
+**AGENT 8 â€” PERFORMANCE OPTIMIZER**
 Top 3 performance bottlenecks most likely in production. Caching opportunities:
 what to cache, TTL strategy, which library. Memory management risks for large
 inputs. Batching opportunities. API call deduplication and pre-fetching.
 
-**AGENT 9 — E2E RUNNER**
+**AGENT 9 â€” E2E RUNNER**
 Top 3-5 critical user journeys to test end-to-end. Test skeleton for each
 critical journey. Happy path test structure. Error path test structure (invalid
 input, API down, output failure). CI integration: where E2E tests run and what
 blocks deployment.
 
-**AGENT 10 — REFACTOR CLEANER**
+**AGENT 10 â€” REFACTOR CLEANER**
 Top 5 patterns that create dead code in projects like this. Cleanup checklist
 to run at end of each phase. Duplication risks and where duplicate logic grows.
 Dependency hygiene: avoiding unused packages. Refactor milestones per phase.
 
-**AGENT 11 — DOC UPDATER**
+**AGENT 11 â€” DOC UPDATER**
 README structure for this project (exact sections). .env.example file contents
 based on all secrets and config identified in the pipeline. Codemap plan for
 docs/ folder. Setup guide outline for new developers. Documentation update
@@ -650,25 +353,25 @@ END WITH:
 - Project Readiness Score: X/10
 - Status: GREEN / YELLOW / RED
 - Complete implementation checklist ordered by phase
-- Top 5 risks ranked by probability × impact
+- Top 5 risks ranked by probability Ã— impact
 - Definition of Done for each phase
 - First action: the exact first thing to do right now
 
 ---
 
 ### AUTOFIRE EXECUTION RULES (ALL TOOLS)
-0. **AGENT MODE CHECK — Output this banner before every pipeline, no exceptions:**
+0. **AGENT MODE CHECK â€” Output this banner before every pipeline, no exceptions:**
    ```
-   ⚠️  AGENT MODE CHECK
-   Are you in Agent mode (✦) in VS Code Copilot Chat?
-   • Agent mode  → real sub-agents, full file access, faster execution
-   • Ask/Edit mode → role-play only, no file access, 10-20x slower
-   To switch: click the mode selector at bottom-left of the chat input → select Agent (✦)
-   Pipeline starting now — switch mode first for best results.
+   âš ï¸  AGENT MODE CHECK
+   Are you in Agent mode (âœ¦) in VS Code Copilot Chat?
+   â€¢ Agent mode  â†’ real sub-agents, full file access, faster execution
+   â€¢ Ask/Edit mode â†’ role-play only, no file access, 10-20x slower
+   To switch: click the mode selector at bottom-left of the chat input â†’ select Agent (âœ¦)
+   Pipeline starting now â€” switch mode first for best results.
    ```
-1. Never ask for clarification before starting — begin immediately on trigger
-2. Never skip an agent — all agents must run in order
-3. Label every agent section clearly: `## AGENT N — [AGENT NAME]`
+1. Never ask for clarification before starting â€” begin immediately on trigger
+2. Never skip an agent â€” all agents must run in order
+3. Label every agent section clearly: `## AGENT N â€” [AGENT NAME]`
 4. Feed previous agent output into next agent's context
 5. Always produce the final summary report
 6. If context is running low, compress earlier sections but complete all agents
@@ -676,7 +379,7 @@ END WITH:
 ---
 
 ## SECTION 14: ORCHESTRATED DEVELOPMENT MODES
-## (Precision Path — AO Backbone + Quick/Standard/Full Pre-Flight Depth)
+## (Precision Path â€” AO Backbone + Quick/Standard/Full Pre-Flight Depth)
 
 This section defines the premium development path that combines:
 - **Quick / Standard / Full** pre-flight agent depth (Section 13) for thorough analysis before any code is written
@@ -697,18 +400,18 @@ Use Section 13 plain modes for exploratory work, drafts, and speed-over-rigor si
 | `orchestrated full: [task]` | Full + AO backbone | 11 agents |
 
 To also include Tier 3 language specialists, append them to your trigger:
-- `orchestrated standard: build auth API — also run typescript-reviewer`
-- `orchestrated full: payment module — also run security-reviewer and java-reviewer`
+- `orchestrated standard: build auth API â€” also run typescript-reviewer`
+- `orchestrated full: payment module â€” also run security-reviewer and java-reviewer`
 
 ---
 
 ### THE WORKFLOW
 
-#### ══════════════════════════════════════════════
-#### PHASE 1 — PRE-FLIGHT ANALYSIS (current window)
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### PHASE 1 â€” PRE-FLIGHT ANALYSIS (current window)
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-Run the agents defined by your chosen mode — Quick (4), Standard (6), or Full (11).
+Run the agents defined by your chosen mode â€” Quick (4), Standard (6), or Full (11).
 If you specified Tier 3 agents in the trigger, run those immediately after.
 All agents run in the current window sequentially.
 
@@ -717,16 +420,16 @@ test skeletons, security findings, quality gates, and any language-specific find
 
 ---
 
-#### ══════════════════════════════════════════════
-#### CHECKPOINT 1 — REVIEW & BLUEPRINT (mandatory human gate)
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### CHECKPOINT 1 â€” REVIEW & BLUEPRINT (mandatory human gate)
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 After all Phase 1 agents complete, output this exact block:
 
 ```
-═══════════════════════════════════════════════════════════
-✅ PHASE 1 COMPLETE — Pre-flight Analysis Done
-═══════════════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+âœ… PHASE 1 COMPLETE â€” Pre-flight Analysis Done
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 Mode: [QUICK / STANDARD / FULL]
 Agents run: [N]
@@ -737,26 +440,26 @@ Top risks identified:
 2. [Risk 2]
 3. [Risk 3]
 
-═══════════════════════════════════════════════════════════
-📋 CONTEXT BLUEPRINT (copy this if opening a new window)
-═══════════════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+ðŸ“‹ CONTEXT BLUEPRINT (copy this if opening a new window)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 Task: [original task description]
 Stack: [technology stack decisions]
 Architecture: [key module boundaries and decisions]
-Implementation order: [phase 1 → phase 2 → ...]
+Implementation order: [phase 1 â†’ phase 2 â†’ ...]
 Critical constraints: [what must NOT be done]
 TDD entry point: [exact first failing test to write]
 Security requirements: [key findings from security scan]
 Quality gates: [coverage %, function size limits, etc.]
-═══════════════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-⏸️  REVIEW THE ANALYSIS ABOVE BEFORE PROCEEDING.
+â¸ï¸  REVIEW THE ANALYSIS ABOVE BEFORE PROCEEDING.
 
 Choose your next step:
 [A] Proceed to Phase 2 (Execution) in this same window
-[B] Open a new window → paste the Context Blueprint above as your first message
+[B] Open a new window â†’ paste the Context Blueprint above as your first message
 [C] Request changes to the plan before executing
-[D] Stop here — analysis is sufficient
+[D] Stop here â€” analysis is sufficient
 
 Your choice: ___
 ```
@@ -765,9 +468,9 @@ Wait for user to respond before proceeding.
 
 ---
 
-#### ══════════════════════════════════════════════
-#### PHASE 2 — EXECUTION
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### PHASE 2 â€” EXECUTION
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 Execute the implementation based on Phase 1 output and the Context Blueprint.
 
@@ -775,7 +478,7 @@ Execute the implementation based on Phase 1 output and the Context Blueprint.
 Executor can reference any agent output from Phase 1.
 
 **New window (user chose option B):** Executor sees only the Context Blueprint.
-Cannot infer from Phase 1 conversation — must follow blueprint explicitly.
+Cannot infer from Phase 1 conversation â€” must follow blueprint explicitly.
 Must ask for clarification if blueprint is ambiguous rather than guessing.
 
 Either approach is valid. New window provides stronger bias prevention.
@@ -783,28 +486,28 @@ Same window provides richer context and lower friction.
 
 ---
 
-#### ══════════════════════════════════════════════
-#### CHECKPOINT 2 — POST-EXECUTION REVIEW DECISION
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### CHECKPOINT 2 â€” POST-EXECUTION REVIEW DECISION
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 After execution completes, output this exact block:
 
 ```
-═══════════════════════════════════════════════════════════
-✅ PHASE 2 COMPLETE — Implementation Done
-═══════════════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+âœ… PHASE 2 COMPLETE â€” Implementation Done
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 Files created/modified: [list]
 Tests passing: [N/N]
 Confidence: [X]%
 
-⏸️  REVIEW THE IMPLEMENTATION ABOVE BEFORE PROCEEDING.
+â¸ï¸  REVIEW THE IMPLEMENTATION ABOVE BEFORE PROCEEDING.
 
 Choose your next step:
 [A] Run Phase 3 review in this same window (fast)
 [B] Request fixes before review
 [C] Generate handover.md for blind cross-model review
-[D] Deliver as-is — no further review needed
+[D] Deliver as-is â€” no further review needed
 
 Your choice: ___
 ```
@@ -813,14 +516,14 @@ Wait for user to respond before proceeding.
 
 ---
 
-#### ══════════════════════════════════════════════
-#### PHASE 3 — CODE REVIEW
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### PHASE 3 â€” CODE REVIEW
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 **Same window (user chose option A):**
 Run the code-reviewer agent against the implementation.
 Reviewer has full context of Phase 1 and Phase 2.
-Fast quality check — catches obvious issues.
+Fast quality check â€” catches obvious issues.
 
 **Blind review via handover.md (user chose option C):**
 Generate a handover.md file with the following structure:
@@ -835,7 +538,7 @@ Generate a handover.md file with the following structure:
 [all functional and non-functional requirements]
 
 ## Implementation
-[full code — all files created or modified, with file paths]
+[full code â€” all files created or modified, with file paths]
 
 ## Review Instructions
 You are a blind judge. You have not seen any planning, architecture discussion,
@@ -843,7 +546,7 @@ or implementation reasoning. Review the code above against the requirements only
 
 Evaluate:
 1. Does the implementation meet all stated requirements?
-2. Security vulnerabilities (OWASP Top 10 — exact vulnerable line + fix)
+2. Security vulnerabilities (OWASP Top 10 â€” exact vulnerable line + fix)
 3. Correctness and bugs (logic errors, edge cases missed)
 4. Code quality (naming, function size, error handling, test coverage)
 5. Architecture concerns (will this scale? coupling issues?)
@@ -853,13 +556,13 @@ exact location, and exact fix for each issue.
 ```
 
 Paste this handover.md into a new chat window, or send to a different AI model entirely.
-Cross-model review (e.g., Claude writes → Gemini reviews) provides the strongest blind test.
+Cross-model review (e.g., Claude writes â†’ Gemini reviews) provides the strongest blind test.
 
 ---
 
-#### ══════════════════════════════════════════════
-#### OPTIONAL PHASE 4 — SECOND BLIND REVIEW
-#### ══════════════════════════════════════════════
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+#### OPTIONAL PHASE 4 â€” SECOND BLIND REVIEW
+#### â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 For Full mode or high-stakes work only.
 
@@ -874,20 +577,20 @@ Ask the current AI:
 > What architectural concerns would a principal engineer raise? What blind spots
 > does your training have? Be brutally honest."
 
-Cost: ~3–5K tokens. Effectiveness: ~40–50% of a full second cross-model review.
+Cost: ~3â€“5K tokens. Effectiveness: ~40â€“50% of a full second cross-model review.
 
 ---
 
-### TIER 3 LANGUAGE SPECIALISTS — OPT-IN PER PROJECT
+### TIER 3 LANGUAGE SPECIALISTS â€” OPT-IN PER PROJECT
 
 Tier 3 agents are **not auto-fired** in any mode. They are language-specific and
 irrelevant to most projects. Include them explicitly when your project uses that language.
 
 **How to invoke:**
 Append the agent name(s) to any orchestrated trigger phrase:
-- `orchestrated quick: build REST API — also run typescript-reviewer`
-- `orchestrated standard: auth module — also run java-reviewer and security-reviewer`
-- `orchestrated full: payment service — also run kotlin-reviewer and database-reviewer`
+- `orchestrated quick: build REST API â€” also run typescript-reviewer`
+- `orchestrated standard: auth module â€” also run java-reviewer and security-reviewer`
+- `orchestrated full: payment service â€” also run kotlin-reviewer and database-reviewer`
 
 When called, Tier 3 agents run at the end of Phase 1, after all mode agents complete.
 
@@ -926,4 +629,4 @@ When called, Tier 3 agents run at the end of Phase 1, after all mode agents comp
 
 *End of MASTER_RULES.md*
 *Single source of truth for all development work*
-*Update this file in GitHub → pull on each laptop to propagate changes*
+*Update this file in GitHub â†’ pull on each laptop to propagate changes*

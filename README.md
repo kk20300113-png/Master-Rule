@@ -61,6 +61,10 @@ orchestrated full: build a document processing microservice that accepts PDF upl
 
 > ⚠️ **Tier 3 agents are NOT included in any pipeline by default.** You must explicitly add them. If you do not append `— also run [agent-name]`, they will not run even in Full mode.
 
+In the VS Code profile bundle, requested Tier 3 specialists run after the base Phase 1 agents and before the checkpoint.
+
+You can also explicitly request the existing built-in specialists such as `security-reviewer`, `database-reviewer`, `performance-optimizer`, `e2e-runner`, `refactor-cleaner`, or `doc-updater`. If one is already included in the selected mode, it is reported as already included instead of being run twice.
+
 Append to any precision lane trigger:
 
 ```
