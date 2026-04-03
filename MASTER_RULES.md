@@ -484,7 +484,132 @@ If any item shows NOT INSTALLED: flag it and offer to install.
 ```
 
 ---
+
+## SECTION 13: AUTOFIRE PIPELINE COMMANDS
+## (Source of Truth for All Tools — VS Code, Claude Code CLI, Gemini CLI, Any Session)
+
+This section defines the complete autofire pipeline system. Any tool that has loaded this
+file MUST recognise and execute these trigger phrases immediately, without asking for
+clarification. The user's task description is whatever they write after the trigger phrase.
+
+### HOW AUTOFIRE WORKS
+- Trigger phrase is detected → pipeline fires immediately
+- Each agent is executed sequentially, labelled with agent name and number
+- No agent is skipped
+- The full output of each agent feeds the next agent's context
+- A final summary report is always produced at the end
+
+---
+
+### TIER 1 PIPELINE — 6 AGENTS
+
+TRIGGER PHRASES (recognise any of these, in any form):
+- `autofire tier 1`
+- `fire tier 1 agents`
+- `run tier 1 pipeline`
+- `refer to master rules autofire tier 1`
+- `tier 1 autofire`
+
+ACTION — execute these 6 agents in order:
+
+**AGENT 1 — PLANNER**
+Phased implementation plan. Technology stack with rationale. Build order and
+dependency graph. Risk table with mitigations. One clarifying question if a
+critical assumption is unclear.
+
+**AGENT 2 — ARCHITECT**
+ASCII system architecture diagram. Module boundary definitions. Python dataclass
+interface contracts for every module boundary. Technology trade-off rationale.
+Scalability path v1 → v2 → v3.
+
+**AGENT 3 — TDD GUIDE**
+Full test file skeletons for every module (pytest). conftest.py with shared
+fixtures. Mock strategy: what to mock vs test directly. pytest.ini with
+--cov-fail-under=80. Build and test order. The exact first failing test to write.
+
+**AGENT 4 — SECURITY REVIEWER**
+Scan for SSRF, command injection, prompt injection, SQL injection, secrets
+exposure, missing input validation. For each finding: severity level, vulnerable
+pattern, exact replacement code.
+
+**AGENT 5 — PYTHON REVIEWER**
+Top 5 anti-patterns to avoid with bad/good examples. Required type hint
+conventions. Naming conventions. Import organization rules. Consistent error
+handling pattern for this codebase.
+
+**AGENT 6 — CODE REVIEWER**
+Pre-implementation quality checklist. Max function and file length. Error
+handling completeness requirements. Logging requirements. CRITICAL and HIGH
+finding criteria for this specific project.
+
+END WITH:
+- Status: GREEN (proceed) / YELLOW (caution) / RED (stop)
+- Top 3 risks
+- First file to implement (full path)
+- First test to write (exact function name)
+
+---
+
+### TIER 1 + TIER 2 PIPELINE — 11 AGENTS
+
+TRIGGER PHRASES (recognise any of these, in any form):
+- `autofire tier 2`
+- `autofire tier 1 and tier 2`
+- `fire all agents`
+- `run full pipeline`
+- `refer to master rules autofire tier 1 and tier 2`
+- `full agent pipeline`
+
+ACTION — execute all 6 Tier 1 agents above, THEN these 5 additional agents:
+
+**AGENT 7 — DATABASE REVIEWER**
+Schema design: correct data types, constraints, primary/foreign keys. Index
+strategy: which columns need indexes and why. SQL query review for N+1 risks
+and full table scans. Connection management: pooling, timeout, concurrency.
+Data integrity rules enforced at database level.
+
+**AGENT 8 — PERFORMANCE OPTIMIZER**
+Top 3 performance bottlenecks most likely in production. Caching opportunities:
+what to cache, TTL strategy, which library. Memory management risks for large
+inputs. Batching opportunities. API call deduplication and pre-fetching.
+
+**AGENT 9 — E2E RUNNER**
+Top 3-5 critical user journeys to test end-to-end. Test skeleton for each
+critical journey. Happy path test structure. Error path test structure (invalid
+input, API down, output failure). CI integration: where E2E tests run and what
+blocks deployment.
+
+**AGENT 10 — REFACTOR CLEANER**
+Top 5 patterns that create dead code in projects like this. Cleanup checklist
+to run at end of each phase. Duplication risks and where duplicate logic grows.
+Dependency hygiene: avoiding unused packages. Refactor milestones per phase.
+
+**AGENT 11 — DOC UPDATER**
+README structure for this project (exact sections). .env.example file contents
+based on all secrets and config identified in the pipeline. Codemap plan for
+docs/ folder. Setup guide outline for new developers. Documentation update
+checklist per phase.
+
+END WITH:
+- Project Readiness Score: X/10
+- Status: GREEN / YELLOW / RED
+- Complete implementation checklist ordered by phase
+- Top 5 risks ranked by probability × impact
+- Definition of Done for each phase
+- First action: the exact first thing to do right now
+
+---
+
+### AUTOFIRE EXECUTION RULES (ALL TOOLS)
+1. Never ask for clarification before starting — begin immediately on trigger
+2. Never skip an agent — all agents must run in order
+3. Label every agent section clearly: `## AGENT N — [AGENT NAME]`
+4. Feed previous agent output into next agent's context
+5. Always produce the final summary report
+6. If context is running low, compress earlier sections but complete all agents
+
+---
+
 *End of MASTER_RULES.md*
 *Single source of truth for all development work*
 *Update this file in GitHub → pull on each laptop to propagate changes*
-*Do not duplicate rules in other files — always point back to this file*
