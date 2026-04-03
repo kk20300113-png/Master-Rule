@@ -506,9 +506,59 @@ clarification. The user's task description is whatever they write after the trig
 
 ---
 
-### TIER 1 PIPELINE — 6 AGENTS
+### COMPLEXITY MODES — CHOOSE YOUR PIPELINE DEPTH
+
+Choose the mode that matches your task. TDD Guide always runs at full depth in all modes.
+
+| Mode | Agents | Trigger | Approx. Time | Use For |
+|------|--------|---------|--------------|---------|
+| Quick | 4 | `quick mode: [task]` | ~3–6 min | Bug fixes, small features, single modules |
+| Standard | 6 | `standard mode: [task]` | ~8–14 min | Full features, security work, APIs |
+| Full | 11 | `full mode: [task]` | ~18–28 min | New projects, pre-deployment, critical systems |
+
+---
+
+### QUICK MODE PIPELINE — 4 AGENTS
+
+TRIGGER PHRASES (recognise any of these):
+- `quick mode:`
+- `quick pipeline:`
+- `run quick mode`
+
+ACTION — execute these 4 agents in order:
+
+**AGENT 1 — PLANNER**
+Phased implementation plan. Technology stack with rationale. Build order and
+dependency graph. Risk table with mitigations. One clarifying question if a
+critical assumption is unclear.
+
+**AGENT 2 — ARCHITECT**
+ASCII system architecture diagram. Module boundary definitions. Python dataclass
+interface contracts for every module boundary. Technology trade-off rationale.
+Scalability path v1 → v2 → v3.
+
+**AGENT 3 — TDD GUIDE** (FULL DEPTH — no shortcuts)
+Full test file skeletons for every module (pytest). conftest.py with shared
+fixtures. Mock strategy: what to mock vs test directly. pytest.ini with
+--cov-fail-under=80. Build and test order. The exact first failing test to write.
+
+**AGENT 4 — CODE REVIEWER**
+Pre-implementation quality checklist. Max function and file length. Error
+handling completeness requirements. Logging requirements. CRITICAL and HIGH
+finding criteria for this specific project.
+
+END WITH:
+- Status: GREEN (proceed) / YELLOW (caution) / RED (stop)
+- Top 2 risks
+- First file to implement (full path)
+- First test to write (exact function name)
+
+---
+
+### TIER 1 PIPELINE — 6 AGENTS  ← also triggered as STANDARD MODE
 
 TRIGGER PHRASES (recognise any of these, in any form):
+- `standard mode:`
 - `autofire tier 1`
 - `fire tier 1 agents`
 - `run tier 1 pipeline`
@@ -555,9 +605,10 @@ END WITH:
 
 ---
 
-### TIER 1 + TIER 2 PIPELINE — 11 AGENTS
+### TIER 1 + TIER 2 PIPELINE — 11 AGENTS  ← also triggered as FULL MODE
 
 TRIGGER PHRASES (recognise any of these, in any form):
+- `full mode:`
 - `autofire tier 2`
 - `autofire tier 1 and tier 2`
 - `fire all agents`
