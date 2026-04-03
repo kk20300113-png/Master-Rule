@@ -675,6 +675,255 @@ END WITH:
 
 ---
 
+## SECTION 14: ORCHESTRATED DEVELOPMENT MODES
+## (Precision Path — AO Backbone + Quick/Standard/Full Pre-Flight Depth)
+
+This section defines the premium development path that combines:
+- **Quick / Standard / Full** pre-flight agent depth (Section 13) for thorough analysis before any code is written
+- **Structured checkpoints** so you review and approve before execution begins
+- **Optional handover.md** for genuinely blind cross-model review at the end
+
+Use this path for production code, anything you will ship, security-sensitive work, or new projects.
+Use Section 13 plain modes for exploratory work, drafts, and speed-over-rigor situations.
+
+---
+
+### TRIGGER PHRASES
+
+| What You Type | Mode | Pre-flight Agents |
+|---|---|---|
+| `orchestrated quick: [task]` | Quick + AO backbone | 4 agents |
+| `orchestrated standard: [task]` | Standard + AO backbone | 6 agents |
+| `orchestrated full: [task]` | Full + AO backbone | 11 agents |
+
+To also include Tier 3 language specialists, append them to your trigger:
+- `orchestrated standard: build auth API — also run typescript-reviewer`
+- `orchestrated full: payment module — also run security-reviewer and java-reviewer`
+
+---
+
+### THE WORKFLOW
+
+#### ══════════════════════════════════════════════
+#### PHASE 1 — PRE-FLIGHT ANALYSIS (current window)
+#### ══════════════════════════════════════════════
+
+Run the agents defined by your chosen mode — Quick (4), Standard (6), or Full (11).
+If you specified Tier 3 agents in the trigger, run those immediately after.
+All agents run in the current window sequentially.
+
+Output at the end of Phase 1: a complete advisory package covering plan, architecture,
+test skeletons, security findings, quality gates, and any language-specific findings.
+
+---
+
+#### ══════════════════════════════════════════════
+#### CHECKPOINT 1 — REVIEW & BLUEPRINT (mandatory human gate)
+#### ══════════════════════════════════════════════
+
+After all Phase 1 agents complete, output this exact block:
+
+```
+═══════════════════════════════════════════════════════════
+✅ PHASE 1 COMPLETE — Pre-flight Analysis Done
+═══════════════════════════════════════════════════════════
+
+Mode: [QUICK / STANDARD / FULL]
+Agents run: [N]
+Status: [GREEN / YELLOW / RED]
+
+Top risks identified:
+1. [Risk 1]
+2. [Risk 2]
+3. [Risk 3]
+
+═══════════════════════════════════════════════════════════
+📋 CONTEXT BLUEPRINT (copy this if opening a new window)
+═══════════════════════════════════════════════════════════
+Task: [original task description]
+Stack: [technology stack decisions]
+Architecture: [key module boundaries and decisions]
+Implementation order: [phase 1 → phase 2 → ...]
+Critical constraints: [what must NOT be done]
+TDD entry point: [exact first failing test to write]
+Security requirements: [key findings from security scan]
+Quality gates: [coverage %, function size limits, etc.]
+═══════════════════════════════════════════════════════════
+
+⏸️  REVIEW THE ANALYSIS ABOVE BEFORE PROCEEDING.
+
+Choose your next step:
+[A] Proceed to Phase 2 (Execution) in this same window
+[B] Open a new window → paste the Context Blueprint above as your first message
+[C] Request changes to the plan before executing
+[D] Stop here — analysis is sufficient
+
+Your choice: ___
+```
+
+Wait for user to respond before proceeding.
+
+---
+
+#### ══════════════════════════════════════════════
+#### PHASE 2 — EXECUTION
+#### ══════════════════════════════════════════════
+
+Execute the implementation based on Phase 1 output and the Context Blueprint.
+
+**Same window (default):** Full context of Phase 1 analysis is available.
+Executor can reference any agent output from Phase 1.
+
+**New window (user chose option B):** Executor sees only the Context Blueprint.
+Cannot infer from Phase 1 conversation — must follow blueprint explicitly.
+Must ask for clarification if blueprint is ambiguous rather than guessing.
+
+Either approach is valid. New window provides stronger bias prevention.
+Same window provides richer context and lower friction.
+
+---
+
+#### ══════════════════════════════════════════════
+#### CHECKPOINT 2 — POST-EXECUTION REVIEW DECISION
+#### ══════════════════════════════════════════════
+
+After execution completes, output this exact block:
+
+```
+═══════════════════════════════════════════════════════════
+✅ PHASE 2 COMPLETE — Implementation Done
+═══════════════════════════════════════════════════════════
+
+Files created/modified: [list]
+Tests passing: [N/N]
+Confidence: [X]%
+
+⏸️  REVIEW THE IMPLEMENTATION ABOVE BEFORE PROCEEDING.
+
+Choose your next step:
+[A] Run Phase 3 review in this same window (fast)
+[B] Request fixes before review
+[C] Generate handover.md for blind cross-model review
+[D] Deliver as-is — no further review needed
+
+Your choice: ___
+```
+
+Wait for user to respond before proceeding.
+
+---
+
+#### ══════════════════════════════════════════════
+#### PHASE 3 — CODE REVIEW
+#### ══════════════════════════════════════════════
+
+**Same window (user chose option A):**
+Run the code-reviewer agent against the implementation.
+Reviewer has full context of Phase 1 and Phase 2.
+Fast quality check — catches obvious issues.
+
+**Blind review via handover.md (user chose option C):**
+Generate a handover.md file with the following structure:
+
+```markdown
+# Handover: Blind Code Review
+
+## Original Task
+[exact task description]
+
+## Requirements
+[all functional and non-functional requirements]
+
+## Implementation
+[full code — all files created or modified, with file paths]
+
+## Review Instructions
+You are a blind judge. You have not seen any planning, architecture discussion,
+or implementation reasoning. Review the code above against the requirements only.
+
+Evaluate:
+1. Does the implementation meet all stated requirements?
+2. Security vulnerabilities (OWASP Top 10 — exact vulnerable line + fix)
+3. Correctness and bugs (logic errors, edge cases missed)
+4. Code quality (naming, function size, error handling, test coverage)
+5. Architecture concerns (will this scale? coupling issues?)
+
+Output: structured findings with severity (CRITICAL / HIGH / MEDIUM / LOW),
+exact location, and exact fix for each issue.
+```
+
+Paste this handover.md into a new chat window, or send to a different AI model entirely.
+Cross-model review (e.g., Claude writes → Gemini reviews) provides the strongest blind test.
+
+---
+
+#### ══════════════════════════════════════════════
+#### OPTIONAL PHASE 4 — SECOND BLIND REVIEW
+#### ══════════════════════════════════════════════
+
+For Full mode or high-stakes work only.
+
+If Phase 3 reviewer found issues and fixed them, generate a second handover.md
+(or use the "Fresh Perspective Simulation" prompt below) to validate the fixes
+and catch anything Phase 3 missed.
+
+**Fresh Perspective Simulation (same window, low cost):**
+Ask the current AI:
+> "Review your previous critique, but do so as if you were a different AI with
+> different training. Focus on: what would a security expert flag that you missed?
+> What architectural concerns would a principal engineer raise? What blind spots
+> does your training have? Be brutally honest."
+
+Cost: ~3–5K tokens. Effectiveness: ~40–50% of a full second cross-model review.
+
+---
+
+### TIER 3 LANGUAGE SPECIALISTS — OPT-IN PER PROJECT
+
+Tier 3 agents are **not auto-fired** in any mode. They are language-specific and
+irrelevant to most projects. Include them explicitly when your project uses that language.
+
+**How to invoke:**
+Append the agent name(s) to any orchestrated trigger phrase:
+- `orchestrated quick: build REST API — also run typescript-reviewer`
+- `orchestrated standard: auth module — also run java-reviewer and security-reviewer`
+- `orchestrated full: payment service — also run kotlin-reviewer and database-reviewer`
+
+When called, Tier 3 agents run at the end of Phase 1, after all mode agents complete.
+
+**Available Tier 3 agents:**
+
+| Agent | Language / Domain | When to Include |
+|---|---|---|
+| `typescript-reviewer` | TypeScript / JavaScript | Any `.ts`, `.tsx`, `.js` files |
+| `java-reviewer` | Java / Spring Boot | Any `.java` files |
+| `java-build-resolver` | Java / Maven / Gradle | Java build errors |
+| `kotlin-reviewer` | Kotlin / Android / KMP | Any `.kt`, `.kts` files |
+| `kotlin-build-resolver` | Kotlin / Gradle | Kotlin build errors |
+| `go-reviewer` | Go | Any `.go` files |
+| `go-build-resolver` | Go | Go build errors |
+| `rust-reviewer` | Rust | Any `.rs` files |
+| `rust-build-resolver` | Rust | Rust build errors |
+| `cpp-reviewer` | C++ | Any `.cpp`, `.hpp` files |
+| `cpp-build-resolver` | C++ | C++ build errors |
+| `flutter-reviewer` | Flutter / Dart | Any `.dart` files |
+| `healthcare-reviewer` | Healthcare / Clinical | EMR, clinical decision support, PHI |
+| `pytorch-build-resolver` | PyTorch / CUDA | PyTorch training/inference crashes |
+
+---
+
+### ORCHESTRATION EXECUTION RULES
+
+0. **Always output the Agent Mode Check banner (Section 13 Rule 0) before Phase 1.**
+1. Run all mode agents in Phase 1 before producing Checkpoint 1 output. Never skip an agent.
+2. Always output the full Checkpoint 1 block and wait for user choice before proceeding.
+3. Always output the full Checkpoint 2 block and wait for user choice before proceeding.
+4. If user appended Tier 3 agents to the trigger, run them at end of Phase 1, before Checkpoint 1.
+5. Generate handover.md as an actual file in the workspace when user requests it (option C at Checkpoint 2).
+6. Never proceed past a checkpoint without explicit user input.
+
+---
+
 *End of MASTER_RULES.md*
 *Single source of truth for all development work*
 *Update this file in GitHub → pull on each laptop to propagate changes*

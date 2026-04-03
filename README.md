@@ -57,19 +57,35 @@ Read MASTER_RULES.md and confirm rules loaded before we begin.
 "apply master rules" → re-activate rules mid-session (always available)
 ```
 
-## Autofire Pipeline Commands (Section 13 of MASTER_RULES.md)
+## Pipeline Commands
 
-Once MASTER_RULES.md is loaded, type any of these phrases to fire agents automatically:
+### Fast Lane — Section 13 (Automated, No Checkpoints)
 
-| What You Type | What Fires | Agents |
-|---|---|---|
-| `autofire tier 1: [task]` | Tier 1 pipeline | 6 agents |
-| `fire tier 1 agents: [task]` | Tier 1 pipeline | 6 agents |
-| `autofire tier 1 and tier 2: [task]` | Full pipeline | 11 agents |
-| `fire all agents: [task]` | Full pipeline | 11 agents |
-| `run full pipeline: [task]` | Full pipeline | 11 agents |
+Fires agents to completion with no human gates. Use for exploratory work, drafts, speed-over-rigor.
 
-Full trigger phrase list and exact agent output specs are in **SECTION 13** of MASTER_RULES.md.
+| What You Type | Mode | Agents | Time |
+|---|---|---|---|
+| `quick mode: [task]` | Quick | 4 | ~3–6 min |
+| `standard mode: [task]` | Standard | 6 | ~8–14 min |
+| `autofire tier 1: [task]` | Standard (alias) | 6 | ~8–14 min |
+| `full mode: [task]` | Full | 11 | ~18–28 min |
+| `fire all agents: [task]` | Full (alias) | 11 | ~18–28 min |
+
+### Precision Lane — Section 14 (AO Backbone + Checkpoints)
+
+Pre-flight agents run first, then **two human checkpoints** before execution and before review. Use for production code, anything you will ship, security-sensitive work.
+
+| What You Type | Pre-flight Agents | Checkpoints | Blind Review |
+|---|---|---|---|
+| `orchestrated quick: [task]` | 4 | 2 | Optional handover.md |
+| `orchestrated standard: [task]` | 6 | 2 | Optional handover.md |
+| `orchestrated full: [task]` | 11 | 2 | Optional handover.md |
+
+**Add Tier 3 language specialists to any precision lane trigger:**
+- `orchestrated standard: build auth API — also run typescript-reviewer`
+- `orchestrated full: payment module — also run java-reviewer`
+
+Full pipeline specs are in **SECTION 13** and **SECTION 14** of MASTER_RULES.md.
 
 ---
 
