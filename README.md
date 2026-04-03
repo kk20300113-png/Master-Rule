@@ -57,11 +57,103 @@ Read MASTER_RULES.md and confirm rules loaded before we begin.
 "apply master rules" → re-activate rules mid-session (always available)
 ```
 
+## Autofire Pipeline Commands (Section 13 of MASTER_RULES.md)
+
+Once MASTER_RULES.md is loaded, type any of these phrases to fire agents automatically:
+
+| What You Type | What Fires | Agents |
+|---|---|---|
+| `autofire tier 1: [task]` | Tier 1 pipeline | 6 agents |
+| `fire tier 1 agents: [task]` | Tier 1 pipeline | 6 agents |
+| `autofire tier 1 and tier 2: [task]` | Full pipeline | 11 agents |
+| `fire all agents: [task]` | Full pipeline | 11 agents |
+| `run full pipeline: [task]` | Full pipeline | 11 agents |
+
+Full trigger phrase list and exact agent output specs are in **SECTION 13** of MASTER_RULES.md.
+
+---
+
+## Agent Registry — All 30 ECC Agents
+
+Installed at `~/.claude/agents/` via [everything-claude-code](https://github.com/affaan-m/everything-claude-code).
+
+### TIER 1 — Core Pipeline Agents (Use Every Session)
+
+These 6 agents run on virtually every feature. Fire them with `autofire tier 1`.
+
+| Agent | Role | What It Produces | When to Call |
+|---|---|---|---|
+| **planner** | Strategist | Phased implementation plan, tech stack, build order, risk table | Before writing any code |
+| **architect** | System Designer | ASCII architecture diagram, module boundaries, Python dataclass contracts, scalability path | After planner, before TDD |
+| **tdd-guide** | Test-First Enforcer | Test file skeletons, conftest.py, pytest.ini (80% coverage), mock strategy, first failing test | Before writing any function |
+| **security-reviewer** | Attack Simulator | OWASP Top 10 scan, SSRF/injection/secrets findings, exact fix code per issue | Before every commit |
+| **python-reviewer** | Python Specialist | PEP 8 compliance, type hints, anti-patterns, naming conventions, error handling patterns | After writing Python code |
+| **code-reviewer** | Senior Engineer Read-Through | Quality, maintainability, error handling, logic correctness, naming | After any code change |
+
+### TIER 2 — Regular Support Agents (Use Per Phase)
+
+These 5 agents run at specific milestones. Included in `autofire tier 1 and tier 2`.
+
+| Agent | Role | What It Produces | When to Call |
+|---|---|---|---|
+| **database-reviewer** | Query Doctor | Schema design, index strategy, SQL query review, integrity constraints, connection pooling | Before finalising any DB schema |
+| **performance-optimizer** | Speed Engineer | Bottleneck analysis, caching strategy, memory risk, batching opportunities, API deduplication | After Phase 1 complete, before production |
+| **e2e-runner** | User Journey Tester | Critical flow test skeletons, happy/error path tests, CI integration config | Before each deployment |
+| **refactor-cleaner** | Dead Code Remover | Unused functions/imports/packages found and safely removed, duplicate logic consolidated | End of each phase |
+| **doc-updater** | README Keeper | Updated README, .env.example, codemap diagrams, setup guides, per-phase doc checklist | After adding any new feature |
+
+### TIER 3 — Language Specialists (Use Only for That Language)
+
+Call individually when working in that specific language. Not included in autofire pipelines.
+
+| Agent | Language | Use When |
+|---|---|---|
+| **typescript-reviewer** | TypeScript / JavaScript | Any `.ts`, `.tsx`, `.js`, `.jsx` files |
+| **kotlin-reviewer** | Kotlin / Android / KMP | Any `.kt`, `.kts` files |
+| **kotlin-build-resolver** | Kotlin / Gradle | Kotlin build errors |
+| **java-reviewer** | Java / Spring Boot | Any `.java` files |
+| **java-build-resolver** | Java / Maven / Gradle | Java build errors |
+| **go-reviewer** | Go | Any `.go` files |
+| **go-build-resolver** | Go | Go compilation errors |
+| **rust-reviewer** | Rust | Any `.rs` files |
+| **rust-build-resolver** | Rust / Cargo | Rust build/borrow checker errors |
+| **cpp-reviewer** | C++ | Any `.cpp`, `.hpp`, `.h` files |
+| **cpp-build-resolver** | C++ / CMake | C++ build/linker errors |
+| **flutter-reviewer** | Flutter / Dart | Any `.dart` files |
+| **pytorch-build-resolver** | PyTorch / CUDA | CUDA/tensor/training errors |
+| **healthcare-reviewer** | Clinical / PHI / HIPAA | Healthcare data or clinical logic |
+
+### UTILITY AGENTS (Invoke By Name Anytime)
+
+| Agent | Purpose | When to Call |
+|---|---|---|
+| **build-error-resolver** | Fix TypeScript/JS/Python build errors (minimal diff only) | When any build breaks |
+| **docs-lookup** | Fetch live library documentation via Context7 MCP | When you need current API docs |
+| **loop-operator** | Monitor and recover autonomous agent batch loops | When running overnight batch jobs |
+| **harness-optimizer** | Tune ECC agent config for reliability, cost, throughput | Monthly maintenance |
+| **chief-of-staff** | Triage email/Slack/LINE/Messenger, draft replies | When managing communications |
+
+---
+
+## How to Call a Single Agent
+
+```
+Use the planner agent to plan [task]
+Use the security reviewer to audit [file]
+Use the TDD guide to write tests for [module]
+Use the architect agent to design [component]
+Use the code reviewer to review [file or recent changes]
+Use the Python reviewer to review [file or folder]
+Use the database reviewer to review [schema or queries]
+```
+
+---
+
 ## Installed Repositories This System References
 
 | Repository | Purpose | Stars |
 |-----------|---------|-------|
-| affaan-m/everything-claude-code | Agent harness, 28 agents, 125+ skills | ~100K |
+| affaan-m/everything-claude-code | Agent harness, 30 agents, 125+ skills | ~100K |
 | hesreallyhim/awesome-claude-code | Vetted skill and tool index | Active |
 | Chachamaru127/claude-code-harness | TypeScript guardrail engine | Active |
 | farion1231/cc-switch | CLI manager, model switching | 27K+ |
