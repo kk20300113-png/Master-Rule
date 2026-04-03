@@ -3,6 +3,109 @@
 Universal development standard for all AI-assisted projects.
 One set of rules. All tools. All laptops.
 
+---
+
+## How to Fire Agents — Quick Reference
+
+Copy any of these prompts exactly into VS Code Chat (Agent mode ✦), Claude Code, or any AI tool that has loaded MASTER_RULES.md.
+
+> ⚠️ **Tier 3 language specialists are NEVER auto-fired.** They must be added manually using `— also run [agent-name]`. See Tier 3 section below.
+
+### Fast Lane (Section 13) — Automated, No Checkpoints
+
+Fires all agents to completion. No human gates. Use for drafts, exploration, speed-over-rigor.
+
+| Goal | Prompt to type |
+|---|---|
+| Bug fix / small feature | `quick mode: [describe your task]` |
+| Full feature with security | `standard mode: [describe your task]` |
+| New project / pre-deployment | `full mode: [describe your task]` |
+
+**Examples:**
+```
+quick mode: add email validation to the user registration form in the FastAPI backend
+```
+```
+standard mode: build a JWT authentication system with refresh tokens for a Node.js Express API
+```
+```
+full mode: design and implement a multi-tenant SaaS billing system using Stripe webhooks and PostgreSQL
+```
+
+---
+
+### Precision Lane (Section 14) — Pre-flight + 2 Human Checkpoints + Optional Blind Review
+
+Runs pre-flight agents first, then stops for your review before execution begins, then stops again before review. Use for production code, anything you will ship, security-sensitive work.
+
+| Goal | Prompt to type |
+|---|---|
+| Small feature, want review gate | `orchestrated quick: [describe your task]` |
+| Production feature | `orchestrated standard: [describe your task]` |
+| Greenfield project | `orchestrated full: [describe your task]` |
+
+**Examples:**
+```
+orchestrated quick: add pagination to the /users endpoint using cursor-based pagination
+```
+```
+orchestrated standard: build a password reset flow with time-limited tokens, rate limiting, and audit logging
+```
+```
+orchestrated full: build a document processing microservice that accepts PDF uploads, extracts text via OCR, stores metadata in PostgreSQL, and exposes a REST API
+```
+
+---
+
+### Tier 3 — Language Specialists (Opt-In Only, Never Auto-Fired)
+
+> ⚠️ **Tier 3 agents are NOT included in any pipeline by default.** You must explicitly add them. If you do not append `— also run [agent-name]`, they will not run even in Full mode.
+
+Append to any precision lane trigger:
+
+```
+orchestrated standard: build a React dashboard with real-time WebSocket updates — also run typescript-reviewer
+```
+```
+orchestrated full: implement a CQRS event sourcing system for order management — also run java-reviewer
+```
+```
+orchestrated full: build a Kotlin multiplatform backend with Ktor and PostgreSQL — also run kotlin-reviewer and database-reviewer
+```
+```
+orchestrated standard: add OAuth2 social login with Google and GitHub — also run typescript-reviewer and security-reviewer
+```
+```
+orchestrated quick: implement a high-throughput message queue consumer in Rust — also run rust-reviewer
+```
+
+**Tier 3 agents available:**
+
+| Agent name | Language / Domain |
+|---|---|
+| `typescript-reviewer` | TypeScript / JavaScript |
+| `java-reviewer` | Java / Spring Boot |
+| `java-build-resolver` | Java build errors |
+| `kotlin-reviewer` | Kotlin / Android / KMP |
+| `kotlin-build-resolver` | Kotlin build errors |
+| `go-reviewer` | Go |
+| `go-build-resolver` | Go build errors |
+| `rust-reviewer` | Rust |
+| `rust-build-resolver` | Rust build errors |
+| `cpp-reviewer` | C++ |
+| `cpp-build-resolver` | C++ build errors |
+| `flutter-reviewer` | Flutter / Dart |
+| `healthcare-reviewer` | Clinical / PHI / HIPAA |
+| `pytorch-build-resolver` | PyTorch / CUDA |
+
+---
+
+### Blind Review via handover.md
+
+At Checkpoint 2 of any precision lane pipeline, choose option `C`. The AI generates a `handover.md` file. Paste it into a new chat window or a different AI model entirely for a genuinely blind cross-model review.
+
+---
+
 ## What This Is
 
 A single repository that makes every AI tool you use follow the same
