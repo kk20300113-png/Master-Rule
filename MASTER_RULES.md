@@ -39,9 +39,14 @@ must begin with exactly this block before addressing any task:
 ║  Guardrails : Planning | Security |          ║
 ║               Context | Client-Safety        ║
 ║  ECC Skills : [installed / not installed]    ║
+║  Agent Mode : [Agent ✦ / Ask / Edit]         ║
 ║  Status     : READY                          ║
 ╚══════════════════════════════════════════════╝
 ```
+
+⚠️  If Agent Mode shows Ask or Edit — remind the user:
+"Switch to Agent mode (✦ icon in chat input) before running autofire
+ pipelines. Ask/Edit = role-play only. Agent mode = real sub-agents."
 
 If this block does not appear, the rules did not load.
 I will ask you to read this file again before anything proceeds.
@@ -601,6 +606,15 @@ END WITH:
 ---
 
 ### AUTOFIRE EXECUTION RULES (ALL TOOLS)
+0. **AGENT MODE CHECK — Output this banner before every pipeline, no exceptions:**
+   ```
+   ⚠️  AGENT MODE CHECK
+   Are you in Agent mode (✦) in VS Code Copilot Chat?
+   • Agent mode  → real sub-agents, full file access, faster execution
+   • Ask/Edit mode → role-play only, no file access, 10-20x slower
+   To switch: click the mode selector at bottom-left of the chat input → select Agent (✦)
+   Pipeline starting now — switch mode first for best results.
+   ```
 1. Never ask for clarification before starting — begin immediately on trigger
 2. Never skip an agent — all agents must run in order
 3. Label every agent section clearly: `## AGENT N — [AGENT NAME]`
