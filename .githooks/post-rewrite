@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+sync_runner="$repo_root/.githooks/run-sync"
+
+if [[ -x "$sync_runner" ]]; then
+  "$sync_runner" post-rewrite
+fi
+
+exit 0

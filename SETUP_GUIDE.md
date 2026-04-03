@@ -73,33 +73,99 @@ Gemini CLI will now load your rules automatically every session.
 
 ---
 
-## Step 4: Activate VS Code Chat — Per Project Setup
+## Step 4: Activate VS Code Copilot Profile — One-Time Per Laptop
+
+This is the recommended setup if you want your router, prompts,
+and custom agents to follow you across devices.
+
+After cloning this repo on a laptop, run one command:
+
+**Windows PowerShell**
+```
+powershell -File ~/master-rules/scripts/install-vscode-profile.ps1
+```
+
+If your laptop blocks local scripts and you trust this repo, you can run:
+```
+powershell -ExecutionPolicy Bypass -File ~/master-rules/scripts/install-vscode-profile.ps1
+```
+
+**macOS / Linux**
+```
+bash ~/master-rules/scripts/install-vscode-profile.sh
+```
+
+This installs the VS Code Copilot profile bundle from this repo into
+your local VS Code user profile.
+
+Important:
+- the profile bundle makes the router, prompts, and custom agents available
+- you still need to open Copilot Chat in Agent mode
+- you still need to type the trigger phrase you want to run
+
+After that, open a fresh Copilot chat in Agent mode and use the trigger directly:
+```
+orchestrated standard: build a tiny test feature
+```
+
+If you see the Agent Mode Check banner and a Phase 1 checkpoint,
+the profile bundle is working.
+
+Optional: if you want future `git pull` operations in this repo to refresh
+the VS Code profile automatically on this laptop, run a one-time bootstrap.
+
+**Windows PowerShell**
+```
+powershell -File ~/master-rules/scripts/bootstrap-git-hooks.ps1
+```
+
+**macOS / Linux**
+```
+bash ~/master-rules/scripts/bootstrap-git-hooks.sh
+```
+
+This does one trusted local setup step on that device. After that,
+future pull, checkout, and rebase operations in this repo auto-sync
+the VS Code profile bundle.
+
+If a later hook-based sync fails, run the installer manually once,
+then rerun the bootstrap command if needed.
+
+If a later hook-based sync succeeds, the device records:
+- `.git/master-rules-profile-sync.last-success`
+
+That file shows the last hook name, commit hash, and UTC timestamp.
+
+For a simple copy-paste checklist for a second device, see `NEW_DEVICE_SOP.md`.
+
+## Step 5: VS Code Project-Level Pointer — Optional Fallback
+
+If you also want a per-project reminder to read `MASTER_RULES.md`,
+keep the existing `.vscode/settings.json` pointer in each project.
 
 For each project you open in VS Code, do this once:
 
-1. In your project folder, create a folder called ".vscode" if it
-   doesn't already exist (you can do this in VS Code's file explorer
-   by right-clicking and selecting "New Folder")
+1. In your project folder, create a folder called `.vscode` if it
+   doesn't already exist.
 
 2. Copy the settings.json file from the master-rules repo into
-   your project's .vscode folder:
+   your project's `.vscode` folder:
    ```
    cp ~/master-rules/.vscode/settings.json [your-project-path]/.vscode/settings.json
    ```
 
-3. Replace [your-project-path] with the actual path to your project
+3. Replace [your-project-path] with the actual path to your project.
 
-Also copy MASTER_RULES.md to your project root:
+Also copy `MASTER_RULES.md` to your project root:
 ```
 cp ~/master-rules/MASTER_RULES.md [your-project-path]/MASTER_RULES.md
 ```
 
-After this, VS Code's AI chat will have a standing instruction to
-reference your rules. Still use the opening ritual to fully activate.
+This pointer is useful, but it is separate from the profile bundle above.
 
 ---
 
-## Step 5: Activate Antigravity Desktop — One-Time Setup
+## Step 6: Activate Antigravity Desktop — One-Time Setup
 
 1. Open Antigravity Desktop
 2. Go to Settings or Agent Configuration
@@ -113,7 +179,7 @@ for every session.
 
 ---
 
-## Step 6: Claude Desktop — Opening Ritual Only
+## Step 7: Claude Desktop — Opening Ritual Only
 
 Claude Desktop does not have an auto-read system.
 At the start of every Claude Desktop session, type:
@@ -130,7 +196,7 @@ Read MASTER_RULES.md and confirm rules loaded before we begin.
 
 ---
 
-## Step 7: Kimi Extension in VS Code — Opening Ritual Only
+## Step 8: Kimi Extension in VS Code — Opening Ritual Only
 
 Same as Claude Desktop. At the start of every Kimi session:
 ```
@@ -151,7 +217,8 @@ now and output the confirmation phrase as your next response.
 |------|---------------|-------------|
 | Claude Code terminal | Automatic | None — just look for "MASTER_RULES LOADED" |
 | Gemini CLI | Automatic | None — just look for "MASTER_RULES LOADED" |
-| VS Code Chat | Semi-automatic | Type opening ritual once per session |
+| VS Code Chat with profile bundle | Automatic after one-time install | None except Agent mode |
+| VS Code Chat without profile bundle | Semi-automatic | Type opening ritual once per session |
 | Kimi in VS Code | Manual | Type opening ritual once per session |
 | Claude Desktop | Manual | Type opening ritual once per session |
 | Antigravity Desktop | Automatic (after setup) | None after initial setup |
@@ -169,18 +236,30 @@ Read MASTER_RULES.md and confirm rules loaded before we begin.
 ## How to Update Your Rules
 
 1. Open ~/master-rules/MASTER_RULES.md on any laptop
-2. Edit the rules
+2. Edit the rules or the `vscode-profile/` bundle
 3. Open terminal and type:
    ```
    cd ~/master-rules
-   git add MASTER_RULES.md
-   git commit -m "Updated rules"
+   git add .
+   git commit -m "Update rules and VS Code profile bundle"
    git push
    ```
 4. On your other laptops, type:
    ```
    cd ~/master-rules && git pull
    ```
+5. If you changed anything under `vscode-profile/`, run the installer again:
+   - Windows PowerShell:
+     ```
+     powershell -ExecutionPolicy Bypass -File ~/master-rules/scripts/install-vscode-profile.ps1
+     ```
+   - macOS / Linux:
+     ```
+     bash ~/master-rules/scripts/install-vscode-profile.sh
+     ```
+
+If you already bootstrapped Git hooks on that laptop, you can skip this extra
+installer step after normal `git pull` because the hook will run it for you.
 
 Your rules are now updated everywhere.
 
@@ -213,7 +292,14 @@ Repeat Step 2 of this guide.
 ├── GEMINI.md           ← Auto-fires in Gemini CLI
 ├── ANTIGRAVITY.md      ← Paste into Antigravity system prompt
 ├── .vscode/
-│   └── settings.json   ← Copy to each project's .vscode folder
+│   └── settings.json   ← Optional per-project pointer
+├── vscode-profile/
+│   ├── instructions/   ← VS Code user-profile router
+│   ├── agents/         ← VS Code user-profile custom agents
+│   └── prompts/        ← VS Code user-profile prompt wrappers
+├── scripts/
+│   ├── install-vscode-profile.ps1
+│   └── install-vscode-profile.sh
 └── SETUP_GUIDE.md      ← This file
 ```
 

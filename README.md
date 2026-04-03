@@ -113,6 +113,81 @@ development standards automatically — across every project and every
 laptop. Contains the complete master rules plus installation files
 for Claude Code, Gemini CLI, VS Code, Antigravity Desktop, and more.
 
+## Syncing VS Code Across Devices
+
+This repo can also be the source of truth for your VS Code Copilot user profile.
+The `vscode-profile/` folder contains the router instruction, custom agents, and
+prompt wrappers that power the validated autofire behavior.
+
+On each device:
+1. `git pull`
+2. Run one installer command:
+
+Windows PowerShell:
+```
+powershell -File .\scripts\install-vscode-profile.ps1
+```
+
+If your machine blocks local scripts and you trust this repo, you can use:
+```
+powershell -ExecutionPolicy Bypass -File .\scripts\install-vscode-profile.ps1
+```
+
+macOS / Linux:
+```
+bash ./scripts/install-vscode-profile.sh
+```
+
+That refreshes the local VS Code user profile from the latest GitHub version.
+
+## Optional: Make Post-Pull Sync Automatic On Each Device
+
+GitHub cannot force a new device to auto-run local scripts after `git pull`.
+Git does not trust versioned hooks until you explicitly enable them on that device.
+
+The safe model is:
+1. one-time bootstrap per device
+2. after that, future `git pull`, checkout, and rebase operations in this repo auto-sync the VS Code profile bundle
+
+Windows PowerShell:
+```
+powershell -File .\scripts\bootstrap-git-hooks.ps1
+```
+
+macOS / Linux:
+```
+bash ./scripts/bootstrap-git-hooks.sh
+```
+
+What the bootstrap does:
+- points this repo to the versioned `.githooks/` directory
+- runs the VS Code profile installer once immediately
+- enables automatic profile refresh after later `git pull`, checkout, and rebase operations in this repo
+
+If a hook-based sync fails later, Git operations still complete, but the hook leaves a local error marker in `.git/master-rules-profile-sync.last-error` and prints a recovery message.
+If a hook-based sync succeeds, the hook writes `.git/master-rules-profile-sync.last-success` with the hook name, commit hash, and UTC timestamp.
+
+## Trust Model
+
+Bootstrapping Git hooks on a device means you trust future commits from this repository to update your local VS Code profile.
+
+Before you enable hooks on a device:
+1. verify you are on your trusted repository and branch
+2. review `.githooks/` and `scripts/`
+3. bootstrap only on machines where you want this repo to manage the VS Code profile automatically
+
+To disable automatic post-pull sync on a device:
+```
+git config --unset core.hooksPath
+```
+
+For a copy-paste checklist for a second device, see `NEW_DEVICE_SOP.md`.
+
+Important:
+- this installs the router, prompts, and custom agents into the local profile
+- you still need Agent mode in Copilot Chat
+- you still need to type the trigger phrase, such as `orchestrated standard: ...`
+
 ## Files in This Repository
 
 | File | Purpose | Activation |
@@ -123,6 +198,13 @@ for Claude Code, Gemini CLI, VS Code, Antigravity Desktop, and more.
 | **GEMINI.md** | Auto-fire pointer for Gemini CLI | Automatic every session |
 | **ANTIGRAVITY.md** | Rules for Antigravity Desktop system prompt | Paste once into settings |
 | **.vscode/settings.json** | VS Code Chat instruction injection | Copy to each project |
+| **NEW_DEVICE_SOP.md** | Copy-paste checklist for first-time setup and second-device validation | Use after clone or pull |
+| **vscode-profile/** | VS Code user-profile router, agents, and prompts | Sync to every device |
+| **scripts/install-vscode-profile.ps1** | Windows installer/updater for the VS Code profile bundle | Run after git pull |
+| **scripts/install-vscode-profile.sh** | macOS/Linux installer/updater for the VS Code profile bundle | Run after git pull |
+| **scripts/bootstrap-git-hooks.ps1** | Windows one-time hook bootstrap for automatic post-pull sync | Run once per device |
+| **scripts/bootstrap-git-hooks.sh** | macOS/Linux one-time hook bootstrap for automatic post-pull sync | Run once per device |
+| **.githooks/** | Versioned Git hooks that auto-refresh the VS Code profile after pull/checkout/rebase | Enabled by bootstrap |
 | **SETUP_GUIDE.md** | Plain language setup for each new laptop | Read on each new laptop |
 | **README.md** | This file | GitHub home page |
 
@@ -131,7 +213,9 @@ for Claude Code, Gemini CLI, VS Code, Antigravity Desktop, and more.
 **If setting up a new laptop**: give HANDOVER.md to your agent.
 The agent will verify, execute, and install everything in order.
 
-**If rules are already set up**: type this at the start of any
+**If the VS Code profile bundle is installed**: open a fresh Agent-mode chat and use the trigger directly.
+
+**If rules are already set up but the VS Code profile bundle is not installed**: type this at the start of any
 VS Code Chat, Kimi, or Claude Desktop session:
 ```
 Read MASTER_RULES.md and confirm rules loaded before we begin.
@@ -145,7 +229,7 @@ Read MASTER_RULES.md and confirm rules loaded before we begin.
 
 ## On-Demand Tools (One Line at Session Start)
 
-- VS Code Chat → type the opening ritual
+- VS Code Chat without profile bundle → type the opening ritual
 - Kimi extension → type the opening ritual
 - Claude Desktop → type the opening ritual
 

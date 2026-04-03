@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+hook_name="${1:-hook}"
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+hook_runner="$repo_root/scripts/run-vscode-profile-sync-hook.sh"
+status_file="$(git rev-parse --git-path master-rules-profile-sync.last-error 2>/dev/null || echo "$repo_root/.git/master-rules-profile-sync.last-error")"
+success_file="$(git rev-parse --git-path master-rules-profile-sync.last-success 2>/dev/null || echo "$repo_root/.git/master-rules-profile-sync.last-success")"
+
+if [[ ! -x "$hook_runner" ]]; then
+  printf '%s\n' "master-rules $hook_name hook: hook runner not executable: $hook_runner" > "$status_file"
+  rm -f "$success_file"
+  echo "master-rules $hook_name hook: hook runner not executable: $hook_runner" >&2
+  echo "Run the installer manually after pull or rerun the hook bootstrap." >&2
+  exit 0
+fi
+
+if "$hook_runner"; then
+  rm -f "$status_file"
+  {
+    echo "hook=$hook_name"
+    echo "commit=$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo unknown)"
+    echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo unknown)"
+  } > "$success_file"
+else
+  printf '%s\n' "master-rules $hook_name hook: VS Code profile sync failed" > "$status_file"
+  rm -f "$success_file"
+  echo "master-rules $hook_name hook: VS Code profile sync failed" >&2
+  echo "Run the installer manually, then rerun the hook bootstrap if needed." >&2
+fi
+
+exit 0
