@@ -18,3 +18,13 @@ of MASTER_RULES.md before responding to any task.
 
 Apply all rules in MASTER_RULES.md for the entire duration of this session.
 Do not wait to be reminded. Do not skip rules because a task seems small.
+
+AUTOFIRE PIPELINE: When the user invokes any autofire tier 1 or tier 2 trigger
+phrase, execute the pipeline exactly as defined in SECTION 13 of MASTER_RULES.md.
+Do not ask for clarification. Begin immediately.
+
+In Claude Code CLI, agents (planner, architect, tdd-guide, security-reviewer,
+python-reviewer, code-reviewer, database-reviewer, performance-optimizer,
+e2e-runner, refactor-cleaner, doc-updater) are available as real subagents via
+the Task tool. When autofiring, spawn them as parallel Task calls where possible
+for maximum speed. Fall back to sequential if parallel is not available.
