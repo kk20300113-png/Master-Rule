@@ -556,6 +556,67 @@ GitHub and local are in sync.
 
 ---
 
+## SECTION H — GSTACK SLASH COMMANDS (Specialist Agent Library)
+
+These slash commands are specialist agents built for high-value, focused work.
+They sit in `~/.claude/skills/[skill-name]/SKILL.md`.
+
+**Agent self-selection rule:** Read the Role and What It Does columns below.
+When a user's request matches a command's domain, load that skill file and
+follow its protocol. Do not wait to be told — route autonomously.
+
+**Progressive disclosure principle:** This section gives you just enough to
+route correctly. Full protocol lives in each skill file. Read the skill file
+when you need depth, not before.
+
+---
+
+### Command Reference
+
+| Slash Command | Role | What It Does | Load When... |
+|---|---|---|---|
+| `/office-hours` | YC Partner | Runs 6 forcing questions to reframe your product — cuts to the real problem | Product strategy, pivots, validating ideas |
+| `/autoplan` | Pipeline Director | Runs the full CEO → Design → Engineering review pipeline automatically with auto-decisions | Complex multi-angle plans needing all three lenses at once |
+| `/plan-ceo-review` | CEO / Founder | Challenges assumptions, hunts for the 10-star version of the product | Early planning, "should we build this?" gates |
+| `/plan-eng-review` | Engineering Manager | Reviews architecture, data flow, and edge cases — catches design flaws before code | Pre-build engineering review, API or schema decisions |
+| `/plan-design-review` | Senior Designer | Scores the design 0–10, then edits the plan to reach the target score | UI/UX decisions, design direction reviews |
+| `/review` | Staff Engineer | Finds bugs that pass CI but blow up in production — focuses on real-world failure modes | Post-implementation code review, pre-merge checks |
+| `/cso` | Chief Security Officer | OWASP Top 10 + STRIDE threat modelling — zero false positives, zero noise | Any code touching auth, user data, APIs, payments |
+| `/qa` | QA Lead | Test → fix → re-verify loop until the feature is actually verified working | End-to-end feature verification, regression testing |
+| `/investigate` | Debugger | Root-cause diagnosis before any fix — never patches symptoms | Bug reports, unexpected behaviour, production incidents |
+| `/ship` | Release Engineer | Sync branches, run tests, push to remote, open PR — full release checklist | Ready-to-ship code, production deployments |
+| `/retro` | Engineering Manager | Structured weekly retrospective — what worked, what broke, what changes next week | Post-sprint reviews, team improvement sessions |
+| `/design-shotgun` | Design Explorer | Generates 4–6 design variants with taste memory — fast exploration before committing | Early design exploration, UI direction decisions |
+| `/design-html` | Design Engineer | Converts design mockups into production-quality HTML/CSS | Turning designs into real code, component builds |
+| `/learn` | Teacher | Explains what changed this session using diagrams and plain language | After complex changes, when onboarding needs context |
+| `/careful` | Safety Guardrail | Intercepts destructive commands (rm -rf, DROP TABLE, force-push) and warns before executing | Production environments, shared systems, risky operations |
+| `/codex` | Second-Opinion Engine | Three modes: Review (independent diff critique), Challenge (adversarial break attempt), Consult (session-aware Q&A) | Independent code review, adversarial testing, architecture consultation |
+
+---
+
+### How Agents Use This Section
+
+1. **Match the request** — read Role + What It Does for each command.
+2. **Load the skill file** — full protocol at `~/.claude/skills/[skill-name]/SKILL.md`.
+3. **Run the skill's protocol** — do not improvise the process from the table above.
+4. **Stack commands when needed** — `/cso` + `/plan-eng-review` for a secure API;
+   `/investigate` + `/qa` for a bug that needs root-cause before verification.
+
+### Freedom to Self-Invoke
+
+Agents have full permission to bring in any slash command from this section
+**without waiting for explicit instruction** when the command's domain clearly
+matches the user's request. Signal the invocation:
+
+```
+→ Routing to /cso — your request touches authentication code.
+  Loading ~/.claude/skills/cso/SKILL.md
+```
+
+This autonomy is granted here and applies for the entire session.
+
+---
+
 **To re-activate in any session:** type `apply master rules v1`
 
 ---
