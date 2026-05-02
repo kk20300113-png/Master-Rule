@@ -2,10 +2,16 @@
 # Behavioral Standard — All Projects, All Tools
 # Base: Karpathy-Inspired Coding Principles
 # Additions: Multi-Agent Pipelines | Session Memory | Override Protection
-# Version: 1.4 — May 2026
+# Version: 1.5 — May 2026
 # Owner: Koo — Non-technical AI venture builder, Singapore
 #
 # CHANGELOG
+# v1.5 (3 May 2026) — mem0 added as 5th H.1 auto-fire mandatory alongside
+#                    planning-with-files; Section H.8 (Persistent Memory) added;
+#                    Section I (Complementary Memory Workflow) added explaining
+#                    planning-with-files + mem0 division of labor; mem0 skill
+#                    file created at ~/.claude/skills/mem0/SKILL.md; Option A
+#                    (hosted platform) set as recommended deployment path.
 # v1.4 (2 May 2026) — prompt-architect promoted to H.1 unconditional (every iteration,
 #                    every tool); security-review removed from H.1 (remains keyword-
 #                    triggered via H.5); Section F updated; sync-channels.ps1 updated
@@ -494,19 +500,19 @@ All three must pass. If any fails, revise before presenting.
 
 This file is the single source of truth. Each tool below is hardwired to load
 `MASTER_RULES_v1.md` at session start, default to Orchestrated Quick mode,
-and auto-fire the `planning-with-files` skill at every session start.
+and auto-fire both `planning-with-files` and `mem0` skills at every session start.
 
-| Tool | Config File | Location | Skill Path |
-|------|-------------|----------|------------|
-| VS Code Copilot Chat | `master-rules-v1.instructions.md` | `~\AppData\Roaming\Code\User\instructions\` | `~\.agents\skills\planning-with-files` |
-| Claude Code | `CLAUDE.md` | `~\.claude\CLAUDE.md` | `~\.claude\skills\planning-with-files` |
-| Codex (OpenAI) | `AGENTS.md` | `~\.codex\AGENTS.md` | `~\.codex\skills\planning-with-files` |
-| Roo Code | `master-rules-v1.md` | `~\.roo\rules\master-rules-v1.md` | `~\.roo\skills\planning-with-files` |
-| Kimi Code | `AGENTS.md` | `~\.kimi\AGENTS.md` | `~\.kimi\skills\planning-with-files` |
+| Tool | Config File | Location | Skill Paths |
+|------|-------------|----------|-------------|
+| VS Code Copilot Chat | `master-rules-v1.instructions.md` | `~\AppData\Roaming\Code\User\instructions\` | `~\.agents\skills\planning-with-files` · `~\.agents\skills\mem0` |
+| Claude Code | `CLAUDE.md` | `~\.claude\CLAUDE.md` | `~\.claude\skills\planning-with-files` · `~\.claude\skills\mem0` |
+| Codex (OpenAI) | `AGENTS.md` | `~\.codex\AGENTS.md` | `~\.codex\skills\planning-with-files` · `~\.codex\skills\mem0` |
+| Roo Code | `master-rules-v1.md` | `~\.roo\rules\master-rules-v1.md` | `~\.roo\skills\planning-with-files` · `~\.roo\skills\mem0` |
+| Kimi Code | `AGENTS.md` | `~\.kimi\AGENTS.md` | `~\.kimi\skills\planning-with-files` · `~\.kimi\skills\mem0` |
 
-**Planning-with-files is wired into every tool above.**
-Every session in every tool must run the session-start protocol defined in H.1.
-No exceptions. No opt-out.
+**Both planning-with-files AND mem0 are wired into every tool above.**
+Every session in every tool must run the session-start protocol defined in H.1
+for both skills. No exceptions. No opt-out.
 
 **To re-activate in any session:** type `apply master rules v1`
 
@@ -605,18 +611,22 @@ These skills fire automatically. **Non-negotiable.** No explicit command needed.
 | Skill | Trigger / When | What It Does |
 |---|---|---|
 | `planning-with-files` | **SESSION START — always, every tool, every session** | Creates `task_plan.md`, `findings.md`, `progress.md`. Restores context from previous session. Keeps goals in attention window via file-based memory. Invoke with `/planning-with-files:plan` or `/plan`. |
+| `mem0` | **SESSION START — always, every tool, every session** | Retrieves user preferences, past decisions, and domain knowledge from persistent cross-session memory. Stores new learnings at session end. Complements planning-with-files with long-term agent intelligence. |
 | `prompt-architect` | **EVERY ITERATION — every message, every tool, unconditional** | 4-parameter gate: converts informal input into precise, executable prompts with defined success criteria. Fires before any pipeline or agent. See Section F. |
 | `token-budget-advisor` | "token budget", "token count", "token limit", "running out of tokens", "context window" | Advises on token management and context window optimisation |
 | `blueprint` | "plan", "blueprint", "roadmap" for any complex multi-PR or multi-session work | Turns a 1-line objective into a step-by-step multi-session build plan with dep graph, adversarial review, parallel step detection |
 
-**Session-start rule (planning-with-files):**
+**Session-start rule (planning-with-files + mem0):**
 At the start of EVERY session, in EVERY tool:
-1. Check if `task_plan.md` exists — if yes, read it plus `progress.md` and `findings.md` immediately.
-2. If none exist and the task is multi-step (3+ steps): create all three files before doing anything else.
+1. **Planning-with-files protocol**: Check if `task_plan.md` exists — if yes, read it plus `progress.md` and `findings.md` immediately. If none exist and the task is multi-step (3+ steps): create all three files before doing anything else.
+2. **Mem0 warm-up protocol**: Query Mem0 for user context — retrieve recent preferences, decisions, and domain knowledge for the current user. Inject retrieved memories into agent context. Signal: "Loaded N memories from Mem0."
 3. Re-read `task_plan.md` before every major decision to keep goals in context.
 4. After every 2 view/search/browser operations: write findings to `findings.md`.
-5. At session end: update `progress.md` with what was done and the exact next step.
-Skill path: `~/.claude/skills/planning-with-files/SKILL.md` (Claude Code) · `~/.agents/skills/planning-with-files/SKILL.md` (universal)
+5. At session end: update `progress.md` with what was done and the exact next step; store key learnings to Mem0.
+
+Skill paths:
+- `planning-with-files`: `~/.claude/skills/planning-with-files/SKILL.md` (Claude Code) · `~/.agents/skills/planning-with-files/SKILL.md` (universal)
+- `mem0`: `~/.claude/skills/mem0/SKILL.md` (Claude Code) · `~/.agents/skills/mem0/SKILL.md` (universal)
 
 **Per-iteration rule (prompt-architect):**
 On EVERY user message, in EVERY tool:
@@ -628,6 +638,12 @@ Skill path: `~/.claude/skills/prompt-architect/SKILL.md` (Claude Code) · `~/.ag
 
 **Auto-fire rule:** If trigger appears in any message, load and run that skill
 before proceeding with the primary task. Do not skip. Do not ask permission.
+
+**Complementary memory layers:**
+- `planning-with-files` = task-level memory (what we're building right now)
+- `mem0` = user-level memory (who we're building for, what they prefer, what we've learned)
+Neither replaces the other. Both fire at every session start. See Section H.8 for the
+full complementary workflow.
 
 ---
 
@@ -749,6 +765,46 @@ Only invoke paid API credentials when browser access is insufficient or rate-lim
 
 ---
 
+### H.8 — SKILL GROUP: PERSISTENT MEMORY (Mem0)
+
+**Group trigger words:** "mem0", "memory", "remember this", "store preference",
+"long-term memory", "user memory", "agent memory", "persistent memory",
+"what did I say before", "recall", "don't forget"
+
+**What it is:** Mem0 is a persistent memory layer that stores user preferences,
+past decisions, and domain knowledge across all sessions, all agents, and all users.
+It complements `planning-with-files` (task-level memory) with long-term agent
+intelligence (CRM + personal knowledge base layer).
+
+**When to use:**
+- At every session start (auto-fire alongside planning-with-files)
+- When a user preference is discovered (store it)
+- When cross-session context is needed ("what did we decide about X last week?")
+- When multiple agents need shared user context
+
+**Deployment:**
+- **Option A — Hosted Platform (recommended):** Sign up at app.mem0.ai, get API key.
+  No infrastructure. Managed Vector DB + Graph DB + Key-Value DB in the cloud.
+- **Option B — Self-hosted:** `pip install mem0ai`, run Qdrant locally, configure LLM provider.
+  For full data control. Add Neo4j optionally for relationship-heavy use cases.
+
+**Core operations:**
+```python
+from mem0 import MemoryClient
+client = MemoryClient(api_key=os.environ["MEM0_API_KEY"])
+
+# Store
+client.add(messages=[{"role": "user", "content": "..."}], user_id="koo")
+
+# Retrieve
+memories = client.search(query="user preferences", user_id="koo")
+```
+
+**Skill path:** `~/.claude/skills/mem0/SKILL.md`
+**Plugin repo:** [github.com/mem0ai/mem0](https://github.com/mem0ai/mem0)
+
+---
+
 ### H.7 — GSTACK SPECIALIST SLASH COMMANDS
 
 These specialist agents remain active alongside all skill groups above.
@@ -790,6 +846,7 @@ Stack them with any group skill when depth is needed. Cost-priority applies here
    - `/cso` + `/plan-eng-review` → secure API design
    - `/investigate` + `/qa` → root-cause then verify fix
    - `x-api` or `crosspost` + `browse` → social search (free) before API posting (paid)
+   - `planning-with-files` + `mem0` → task memory + user memory for complete agent context
 
 ### Freedom to Self-Invoke
 
@@ -803,6 +860,108 @@ matches the user's request. Signal the invocation:
 ```
 
 This autonomy is granted here and applies for the entire session.
+
+---
+
+## SECTION I — COMPLEMENTARY MEMORY WORKFLOW
+### planning-with-files + Mem0: How They Work Together
+
+These two memory systems operate at **completely different layers** of the agent
+stack. Neither replaces the other. Both fire at every session start.
+
+### The Memory Stack
+
+```
+┌─────────────────────────────────────────┐
+│  CONTEXT WINDOW (RAM)                   │  ← Volatile, limited, per-message
+│  Current conversation, code, reasoning  │
+├─────────────────────────────────────────┤
+│  planning-with-files (DISK)            │  ← Task-level, project-specific
+│  task_plan.md, findings.md, progress.md │
+│  "What we're building RIGHT NOW"        │
+├─────────────────────────────────────────┤
+│  Mem0 (VECTOR + GRAPH DB)              │  ← User-level, cross-session
+│  Preferences, decisions, domain knowledge│
+│  "Who we're building FOR, what they   │
+│   prefer, what we've learned"          │
+└─────────────────────────────────────────┘
+```
+
+### Division of Labor
+
+**planning-with-files handles the work session:**
+- When you say "build the supply agent for the LNG dashboard," it writes
+  `task_plan.md` with phases, `findings.md` with LNG market structure notes,
+  tracks `progress.md` through the build
+- If context clears mid-build, it recovers automatically from the `.planning/` folder
+- This is entirely local and project-specific
+
+**Mem0 handles cross-session agent intelligence:**
+- When your CarbonIQ agent talks to users, Mem0 stores what each user told it —
+  their project types, jurisdictions, preferred methodologies
+- When your client intelligence agent researches a contact at Petronas, Mem0 stores
+  that you prefer OSINT outputs with commodity desk specificity and confidence ratings
+- The next time any agent in any session works with you, it pulls those preferences
+  back via `mem0.search(query="user preferences for research outputs", user_id="koo")`
+
+### Session Start Protocol (Both Skills)
+
+At the start of EVERY session:
+
+1. **Run planning-with-files protocol** (H.1 auto-fire):
+   - Check for `task_plan.md` → read it, `findings.md`, `progress.md`
+   - Create if missing for multi-step tasks
+
+2. **Run Mem0 warm-up** (H.1 auto-fire):
+   - Query Mem0 for user context: `client.search(query="current preferences and context", user_id="koo")`
+   - Inject retrieved memories into agent context window
+   - Signal: "Loaded N memories from Mem0 for user koo"
+
+3. **Proceed with task** — agent now has both:
+   - Task plan from files (what we're building now)
+   - User context from Mem0 (who we're building for, what they prefer)
+
+### Session End Protocol (Both Skills)
+
+At the end of EVERY session:
+
+1. **Update planning-with-files**:
+   - Mark phases complete in `task_plan.md`
+   - Log session in `progress.md`
+   - Save findings to `findings.md`
+
+2. **Store key learnings to Mem0**:
+   - Any new user preferences discovered
+   - Any decisions made that affect future work
+   - Any domain knowledge worth remembering
+
+3. **Signal completion**: "Session closed. Plans.md updated. Mem0 synced."
+
+### When to Use Which
+
+| Situation | Use planning-with-files | Use Mem0 |
+|---|---|---|
+| Tracking a multi-step build | Yes | No |
+| Storing research findings | Yes | No |
+| Remembering user preferences | No | Yes |
+| Recalling past decisions | No | Yes |
+| Cross-project knowledge | No | Yes |
+| Multi-agent shared context | No | Yes |
+| Session recovery after /clear | Yes | Yes (complementary) |
+
+### Installation for Elephant Gin / CarbonIQ Projects
+
+**Recommended: Option A — Hosted Platform**
+1. Sign up at [app.mem0.ai](https://app.mem0.ai)
+2. Get API key → store as `MEM0_API_KEY` in environment
+3. Install Claude plugin from [github.com/mem0ai/mem0](https://github.com/mem0ai/mem0)
+4. No infrastructure needed — Mem0 manages Vector DB + Graph DB + Key-Value DB
+
+**Only if data control is mandatory: Option B — Self-hosted**
+- `pip install mem0ai`
+- Run Qdrant locally: `docker run -p 6333:6333 qdrant/qdrant`
+- Configure LLM provider in `config.py`
+- Optional: add Neo4j for relationship-heavy use cases
 
 ---
 
