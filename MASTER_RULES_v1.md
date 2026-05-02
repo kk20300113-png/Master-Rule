@@ -2,10 +2,13 @@
 # Behavioral Standard — All Projects, All Tools
 # Base: Karpathy-Inspired Coding Principles
 # Additions: Multi-Agent Pipelines | Session Memory | Override Protection
-# Version: 1.1 — May 2026
+# Version: 1.2 — May 2026
 # Owner: Koo — Non-technical AI venture builder, Singapore
 #
 # CHANGELOG
+# v1.2 (2 May 2026) — Section H rebuilt: H.1–H.7 skill routing directory;
+#                    added Social Media APIs group (H.7); expanded MCP trigger;
+#                    added cost-priority rule; improved readability throughout.
 # v1.1 (2 May 2026) — Fixed Kimi Code config path; added sync-channels.ps1;
 #                    all 4 channels verified and re-synced.
 # v1.0 (May 2026)   — Initial release.
@@ -560,18 +563,22 @@ GitHub and local are in sync.
 
 Skills live at `~/.claude/skills/[skill-name]/SKILL.md`.
 
-**Progressive disclosure principle:** This section gives you just enough to route
-correctly. Full protocol lives in each skill file. Read the skill file when you
-need depth — not before.
+**Progressive disclosure:** This section routes correctly. Full protocol is in each skill file.
+Read the skill file when you need depth — not before.
 
-**Agent self-selection rule:** Match the user's request to a skill group below.
-Load that skill file. Follow its protocol. Do not wait to be told — route autonomously.
-Signal every invocation:
+**Self-selection rule:** Match the request to a group below. Load the skill. Follow its protocol.
+Do not wait to be told. Signal every invocation:
 
 ```
 → Routing to [skill-name] — [one-line reason].
   Loading ~/.claude/skills/[skill-name]/SKILL.md
 ```
+
+**⚡ COST-PRIORITY RULE (applies to every skill in this section):**
+Always exhaust free and low-cost options before using paid services.
+Routing order: free tier → freemium → paid API → premium.
+If a paid credential is required and not available, surface the free alternative first
+and ask before proceeding to a paid path. Never silently consume paid quota.
 
 ---
 
@@ -673,7 +680,7 @@ stack — load the matching skill. Do not wait to be named.
 | `kotlin-ktor-patterns` | Ktor, Koin DI, WebSockets, routing plugins | Ktor project |
 | `kotlin-patterns` | Kotlin, null safety, DSL builders, coroutines — idiomatic Kotlin | Kotlin project |
 | `laravel-patterns` | Laravel, Eloquent, service layers, queues, caching | Laravel project |
-| `mcp-server-patterns` | "build MCP server", "add MCP tool", Node / TS SDK | Node / TS SDK |
+| `mcp-server-patterns` | "build MCP server", "add MCP tool", "create MCP resource", "expose this as MCP", "connect to Claude via MCP", "customise MCP server", "build MCP" | Node / TS SDK |
 | `perl-patterns` | Perl 5.36+, modern Perl idioms, best practices | Perl project |
 | `postgres-patterns` | PostgreSQL, query optimisation, indexing, Supabase | PostgreSQL project |
 | `python-patterns` | Python project, Pythonic idioms, PEP 8, type hints | Python project |
@@ -686,10 +693,34 @@ stack — load the matching skill. Do not wait to be named.
 
 ---
 
-### H.6 — GSTACK SPECIALIST SLASH COMMANDS
+### H.6 — SKILL GROUP: SOCIAL MEDIA APIs
+
+**Group trigger words:** "post to X", "tweet", "X API", "Twitter API", "read my timeline",
+"search X for", "build a Twitter bot", "crosspost", "post to all platforms", "share everywhere",
+"distribute this content", **"LinkedIn search"**, **"X.com search"**, **"leverage on browser"**,
+**"leverage on dark taco browser to search"**, "social media search", "search LinkedIn",
+"search Twitter", "search social"
+
+**Cost-priority for this group:** Use browser-based search (free) before API calls.
+Only invoke paid API credentials when browser access is insufficient or rate-limited.
+
+| Skill | What It Does | Triggers | Needs |
+|---|---|---|---|
+| `x-api` | Post tweets/threads, read timelines, search X, track analytics, build bots. OAuth 2.0, rate limits, platform-native formatting. | "post to X", "tweet this", "X API", "Twitter API", "read my timeline", "search X for", "build a Twitter bot", **"X.com search"**, **"leverage on browser"**, **"leverage on dark taco browser to search"** | X Developer account + OAuth 2.0 (API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET) — **free tier first** |
+| `crosspost` | Distribute one piece of content across X + LinkedIn + Threads + Bluesky simultaneously. Adapts tone and format per platform. Never posts identical text cross-platform. | "crosspost this", "post to all platforms", "share everywhere", "distribute this content", **"LinkedIn search"**, **"social media search"**, **"search LinkedIn"** | Credentials per target platform — **use only platforms already authenticated** |
+
+**Routing logic:**
+1. If the request is a **search or lookup** on a social platform → prefer `browse` skill (free, no API quota) first.
+2. If the request is **posting or writing** to a platform → load `x-api` or `crosspost`.
+3. If credentials are missing → surface the browser-based free path and ask before using API.
+
+---
+
+### H.7 — GSTACK SPECIALIST SLASH COMMANDS
 
 These specialist agents remain active alongside all skill groups above.
-Stack them with any group skill when depth is needed.
+Stack them with any group skill when depth is needed. Cost-priority applies here too
+— prefer free-tier slash commands before any paid integrations.
 
 | Slash Command | Role | What It Does | Load When... |
 |---|---|---|---|
@@ -714,17 +745,18 @@ Stack them with any group skill when depth is needed.
 
 ### How Agents Use This Section
 
-1. **Check H.1 auto-fire triggers first** — token-budget / blueprint / security
-   auto-fire rules always run before anything else.
-2. **Match the skill group** — route to H.2–H.6 based on the user's context.
-3. **Load the skill file** — full protocol at `~/.claude/skills/[skill-name]/SKILL.md`.
-4. **Run the skill's protocol** — do not improvise from this table.
-5. **Stack skills when needed:**
+1. **H.1 auto-fires first** — token-budget / blueprint / security always run before anything else.
+2. **Apply cost-priority** — free tier before paid, always. Never silently consume paid quota.
+3. **Match the skill group** — route to H.2–H.6 (skills) or H.7 (slash commands) based on context.
+4. **Load the skill file** — full protocol at `~/.claude/skills/[skill-name]/SKILL.md`.
+5. **Run the skill's protocol** — do not improvise from this table.
+6. **Stack skills when needed:**
    - `security-review` + `django-security` → Django auth feature
    - `deep-research` + `blueprint` → new product with unknown landscape
    - `team-builder` + `autonomous-loops` → multi-agent recursive pipeline
    - `/cso` + `/plan-eng-review` → secure API design
    - `/investigate` + `/qa` → root-cause then verify fix
+   - `x-api` or `crosspost` + `browse` → social search (free) before API posting (paid)
 
 ### Freedom to Self-Invoke
 
