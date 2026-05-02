@@ -38,6 +38,29 @@ Look for it in this order:
 
 After reading, confirm it is loaded and state the last Plans.md checkpoint.
 
+## PLANNING-WITH-FILES (Session Start — Auto-Fire)
+
+This skill fires AUTOMATICALLY at every session start. No command needed.
+Skill path: ``~/.agents/skills/planning-with-files/SKILL.md``
+
+On every session start:
+1. Check if ``task_plan.md`` exists — if yes, read it plus ``findings.md`` and ``progress.md`` immediately.
+2. If task is multi-step (3+ steps) and no planning files exist: create all three files before starting.
+3. Re-read ``task_plan.md`` before every major decision.
+4. After every 2 view/search/browser operations: write findings to ``findings.md``.
+5. Session end: update ``progress.md`` with what was done and exact next step.
+
+## PROMPT-ARCHITECT (Per-Iteration — Auto-Fire)
+
+This skill fires AUTOMATICALLY on every user message. No command needed.
+Skill path: ``~/.agents/skills/prompt-architect/SKILL.md``
+
+On every message/instruction:
+1. Apply the 4-parameter gate: Task Objective, Target Audience, Success Criteria, Constraints.
+2. Reject vague instructions — identify what is missing and ask before proceeding.
+3. Convert informal input into a precise, executable prompt before any pipeline fires.
+4. Do not proceed without a specific, bounded goal with defined success criteria.
+
 ## DEFAULT PIPELINE MODE
 
 If the user does not specify a pipeline mode, use **Orchestrated Quick mode** automatically.
@@ -83,6 +106,29 @@ Look for it in this order:
 2. Global fallback: ``~/master-rules/MASTER_RULES_v1.md``
 
 After reading, confirm it is loaded and state the last Plans.md checkpoint.
+
+## PLANNING-WITH-FILES (Session Start — Auto-Fire)
+
+This skill fires AUTOMATICALLY at every session start. No command needed.
+Skill path: ``~/.agents/skills/planning-with-files/SKILL.md``
+
+On every session start:
+1. Check if ``task_plan.md`` exists — if yes, read it plus ``findings.md`` and ``progress.md`` immediately.
+2. If task is multi-step (3+ steps) and no planning files exist: create all three files before starting.
+3. Re-read ``task_plan.md`` before every major decision.
+4. After every 2 view/search/browser operations: write findings to ``findings.md``.
+5. Session end: update ``progress.md`` with what was done and exact next step.
+
+## PROMPT-ARCHITECT (Per-Iteration — Auto-Fire)
+
+This skill fires AUTOMATICALLY on every user message. No command needed.
+Skill path: ``~/.agents/skills/prompt-architect/SKILL.md``
+
+On every message/instruction:
+1. Apply the 4-parameter gate: Task Objective, Target Audience, Success Criteria, Constraints.
+2. Reject vague instructions — identify what is missing and ask before proceeding.
+3. Convert informal input into a precise, executable prompt before any pipeline fires.
+4. Do not proceed without a specific, bounded goal with defined success criteria.
 
 ## DEFAULT PIPELINE MODE
 

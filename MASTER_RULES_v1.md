@@ -2,10 +2,14 @@
 # Behavioral Standard — All Projects, All Tools
 # Base: Karpathy-Inspired Coding Principles
 # Additions: Multi-Agent Pipelines | Session Memory | Override Protection
-# Version: 1.3 — May 2026
+# Version: 1.4 — May 2026
 # Owner: Koo — Non-technical AI venture builder, Singapore
 #
 # CHANGELOG
+# v1.4 (2 May 2026) — prompt-architect promoted to H.1 unconditional (every iteration,
+#                    every tool); security-review removed from H.1 (remains keyword-
+#                    triggered via H.5); Section F updated; sync-channels.ps1 updated
+#                    with both auto-fire blocks; all 5 IDE channels re-synced.
 # v1.3 (2 May 2026) — planning-with-files added as 4th H.1 auto-fire mandatory;
 #                    wired into all 5 IDE loader paths; session-start protocol
 #                    merged with Rule SM1; Section E updated with skill paths;
@@ -444,9 +448,10 @@ instruction passes through Section D gates, then Section F translation, then pip
 
 ### When Prompt Architect Fires
 
-Automatically on every instruction. It does not need to be invoked explicitly.
-The 4-parameter check is embedded in Section D above — this section governs
-the translation step that follows.
+**UNCONDITIONAL — every message, every tool, every session.** No invocation needed.
+This skill is listed in H.1 as an unconditional auto-fire mandatory alongside `planning-with-files`.
+The 4-parameter check runs before any pipeline or agent fires. Section D defines who I am;
+Section F translates that into an executable prompt; then pipelines run.
 
 ### The 4-Parameter Gate (from Prompt Architect skill)
 
@@ -600,9 +605,9 @@ These skills fire automatically. **Non-negotiable.** No explicit command needed.
 | Skill | Trigger / When | What It Does |
 |---|---|---|
 | `planning-with-files` | **SESSION START — always, every tool, every session** | Creates `task_plan.md`, `findings.md`, `progress.md`. Restores context from previous session. Keeps goals in attention window via file-based memory. Invoke with `/planning-with-files:plan` or `/plan`. |
+| `prompt-architect` | **EVERY ITERATION — every message, every tool, unconditional** | 4-parameter gate: converts informal input into precise, executable prompts with defined success criteria. Fires before any pipeline or agent. See Section F. |
 | `token-budget-advisor` | "token budget", "token count", "token limit", "running out of tokens", "context window" | Advises on token management and context window optimisation |
 | `blueprint` | "plan", "blueprint", "roadmap" for any complex multi-PR or multi-session work | Turns a 1-line objective into a step-by-step multi-session build plan with dep graph, adversarial review, parallel step detection |
-| `security-review` | "auth", "authentication", "user input", "API endpoint", "payment", "secrets", "credentials", "help me make sure there are no security flaws", "check for vulnerabilities" | Universal security checklist: OWASP Top 10, input validation, secrets management, auth flows |
 
 **Session-start rule (planning-with-files):**
 At the start of EVERY session, in EVERY tool:
@@ -612,6 +617,14 @@ At the start of EVERY session, in EVERY tool:
 4. After every 2 view/search/browser operations: write findings to `findings.md`.
 5. At session end: update `progress.md` with what was done and the exact next step.
 Skill path: `~/.claude/skills/planning-with-files/SKILL.md` (Claude Code) · `~/.agents/skills/planning-with-files/SKILL.md` (universal)
+
+**Per-iteration rule (prompt-architect):**
+On EVERY user message, in EVERY tool:
+1. Apply the 4-parameter gate: Task Objective, Target Audience, Success Criteria, Constraints.
+2. Reject vague instructions ("help me with X", "do something about Y") — surface what is missing and ask.
+3. Convert informal input into a precise, executable prompt before any pipeline fires.
+4. Do not proceed without a specific, bounded goal with defined success criteria.
+Skill path: `~/.claude/skills/prompt-architect/SKILL.md` (Claude Code) · `~/.agents/skills/prompt-architect/SKILL.md` (universal)
 
 **Auto-fire rule:** If trigger appears in any message, load and run that skill
 before proceeding with the primary task. Do not skip. Do not ask permission.
