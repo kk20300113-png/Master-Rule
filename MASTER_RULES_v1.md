@@ -488,5 +488,63 @@ This file is the single source of truth. Each tool below is hardwired to load
 
 ---
 
+## SECTION G — GITHUB SYNC RULE (MANDATORY)
+
+### Rule GS1 — Every Change Must Be Pushed
+
+**This file is only as reliable as its GitHub backup.**
+Any modification to `MASTER_RULES_v1.md` that is not pushed to GitHub is
+invisible to other devices, other tools, and any future session that pulls
+from the repo.
+
+### Rule GS2 — Mandatory Reminder After Every Edit
+
+Whenever `MASTER_RULES_v1.md` is modified — by any agent, in any tool — the
+agent MUST end its response with this block before closing:
+
+```
+⚠️  MASTER_RULES_v1.md SYNC REQUIRED
+Your local file has been changed. GitHub is now out of date.
+Run the following to push:
+
+  cd ~/master-rules
+  git add MASTER_RULES_v1.md
+  git commit -m "chore: update MASTER_RULES_v1.md — [describe change in one line]"
+  git push origin main
+
+Do NOT skip this step. GitHub is the durable backup and cross-device source.
+Local-only changes will be lost if the machine is reset or replaced.
+```
+
+### Rule GS3 — No Silent Edits to This File
+
+Edits to `MASTER_RULES_v1.md` are not complete until they are committed and
+pushed. A local-only change is a draft — not a rule update.
+
+If the user asks to skip the push "just this once":
+1. Name Rule GS1 explicitly
+2. State the risk: "If this machine is reset, this change is lost"
+3. Ask: "Confirm you want to leave this unpushed?"
+
+### Rule GS4 — Sync Verification Command
+
+To confirm GitHub is in sync with the local file at any time:
+
+```
+cd ~/master-rules
+git fetch origin
+git status
+git diff origin/main --stat
+```
+
+If the output shows no staged changes and `Your branch is up to date` —
+GitHub and local are in sync.
+
+---
+
+**To re-activate in any session:** type `apply master rules v1`
+
+---
+
 *MASTER_RULES_v1.md — Built on Karpathy principles + selective additions*
 *Trim what you do not use. Add what your project needs.*
