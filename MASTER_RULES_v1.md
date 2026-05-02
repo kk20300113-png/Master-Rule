@@ -2,10 +2,14 @@
 # Behavioral Standard — All Projects, All Tools
 # Base: Karpathy-Inspired Coding Principles
 # Additions: Multi-Agent Pipelines | Session Memory | Override Protection
-# Version: 1.2 — May 2026
+# Version: 1.3 — May 2026
 # Owner: Koo — Non-technical AI venture builder, Singapore
 #
 # CHANGELOG
+# v1.3 (2 May 2026) — planning-with-files added as 4th H.1 auto-fire mandatory;
+#                    wired into all 5 IDE loader paths; session-start protocol
+#                    merged with Rule SM1; Section E updated with skill paths;
+#                    /autoplan now references planning-with-files as default.
 # v1.2 (2 May 2026) — Section H rebuilt: H.1–H.7 skill routing directory;
 #                    added Social Media APIs group (H.7); expanded MCP trigger;
 #                    added cost-priority rule; improved readability throughout.
@@ -99,13 +103,15 @@ Weak criteria ("make it work") require constant clarification.
 ### Rule SM1 — Plans.md as Session Memory
 
 Every project has a `Plans.md` file. It is the single source of continuity
-across sessions and tools.
+across sessions and tools. The `planning-with-files` skill (H.1) extends this
+with a full 3-file system (`task_plan.md`, `findings.md`, `progress.md`).
 
 **Session start — every time, every tool:**
-1. Check for `Plans.md`. If it exists, read it and state the last checkpoint
-   before doing anything else.
-2. If `Plans.md` does not exist: create it immediately, before any task.
-3. State what this session is for today.
+1. Run `planning-with-files` session-start protocol (see H.1). Auto-fires — no command needed.
+2. Check for `task_plan.md`. If it exists, read it, `findings.md`, and `progress.md` before anything else.
+3. Check for `Plans.md`. If it exists, read it and state the last checkpoint.
+4. If neither exists: create `Plans.md` and `task_plan.md` immediately, before any task.
+5. State what this session is for today.
 
 **Session end — every time, every tool:**
 1. Update `Plans.md` with:
@@ -482,15 +488,20 @@ All three must pass. If any fails, revise before presenting.
 ## SECTION E — TOOL LOADING (How This File Auto-Fires)
 
 This file is the single source of truth. Each tool below is hardwired to load
-`MASTER_RULES_v1.md` at session start and default to Orchestrated Quick mode.
+`MASTER_RULES_v1.md` at session start, default to Orchestrated Quick mode,
+and auto-fire the `planning-with-files` skill at every session start.
 
-| Tool | Config File | Location |
-|------|-------------|----------|
-| VS Code Copilot Chat | `master-rules-v1.instructions.md` | `~\AppData\Roaming\Code\User\instructions\` |
-| Claude Code | `CLAUDE.md` | `~\.claude\CLAUDE.md` |
-| Codex (OpenAI) | `AGENTS.md` | `~\.codex\AGENTS.md` |
-| Roo Code | `master-rules-v1.md` | `~\.roo\rules\master-rules-v1.md` |
-| Kimi Code | `AGENTS.md` | `~\.kimi\AGENTS.md` |
+| Tool | Config File | Location | Skill Path |
+|------|-------------|----------|------------|
+| VS Code Copilot Chat | `master-rules-v1.instructions.md` | `~\AppData\Roaming\Code\User\instructions\` | `~\.agents\skills\planning-with-files` |
+| Claude Code | `CLAUDE.md` | `~\.claude\CLAUDE.md` | `~\.claude\skills\planning-with-files` |
+| Codex (OpenAI) | `AGENTS.md` | `~\.codex\AGENTS.md` | `~\.codex\skills\planning-with-files` |
+| Roo Code | `master-rules-v1.md` | `~\.roo\rules\master-rules-v1.md` | `~\.roo\skills\planning-with-files` |
+| Kimi Code | `AGENTS.md` | `~\.kimi\AGENTS.md` | `~\.kimi\skills\planning-with-files` |
+
+**Planning-with-files is wired into every tool above.**
+Every session in every tool must run the session-start protocol defined in H.1.
+No exceptions. No opt-out.
 
 **To re-activate in any session:** type `apply master rules v1`
 
@@ -584,14 +595,23 @@ and ask before proceeding to a paid path. Never silently consume paid quota.
 
 ### H.1 — AUTO-FIRE MANDATORIES (Always On — No Invocation Required)
 
-These three skills fire automatically whenever their trigger phrase appears.
-**This is non-negotiable.** No explicit command needed from the user.
+These skills fire automatically. **Non-negotiable.** No explicit command needed.
 
-| Skill | Trigger Phrase(s) | What It Does |
+| Skill | Trigger / When | What It Does |
 |---|---|---|
+| `planning-with-files` | **SESSION START — always, every tool, every session** | Creates `task_plan.md`, `findings.md`, `progress.md`. Restores context from previous session. Keeps goals in attention window via file-based memory. Invoke with `/planning-with-files:plan` or `/plan`. |
 | `token-budget-advisor` | "token budget", "token count", "token limit", "running out of tokens", "context window" | Advises on token management and context window optimisation |
 | `blueprint` | "plan", "blueprint", "roadmap" for any complex multi-PR or multi-session work | Turns a 1-line objective into a step-by-step multi-session build plan with dep graph, adversarial review, parallel step detection |
 | `security-review` | "auth", "authentication", "user input", "API endpoint", "payment", "secrets", "credentials", "help me make sure there are no security flaws", "check for vulnerabilities" | Universal security checklist: OWASP Top 10, input validation, secrets management, auth flows |
+
+**Session-start rule (planning-with-files):**
+At the start of EVERY session, in EVERY tool:
+1. Check if `task_plan.md` exists — if yes, read it plus `progress.md` and `findings.md` immediately.
+2. If none exist and the task is multi-step (3+ steps): create all three files before doing anything else.
+3. Re-read `task_plan.md` before every major decision to keep goals in context.
+4. After every 2 view/search/browser operations: write findings to `findings.md`.
+5. At session end: update `progress.md` with what was done and the exact next step.
+Skill path: `~/.claude/skills/planning-with-files/SKILL.md` (Claude Code) · `~/.agents/skills/planning-with-files/SKILL.md` (universal)
 
 **Auto-fire rule:** If trigger appears in any message, load and run that skill
 before proceeding with the primary task. Do not skip. Do not ask permission.
