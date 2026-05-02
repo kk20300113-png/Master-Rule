@@ -556,61 +556,185 @@ GitHub and local are in sync.
 
 ---
 
-## SECTION H — GSTACK SLASH COMMANDS (Specialist Agent Library)
+## SECTION H — SPECIALIST SKILL LIBRARY (Agent Routing Directory)
 
-These slash commands are specialist agents built for high-value, focused work.
-They sit in `~/.claude/skills/[skill-name]/SKILL.md`.
+Skills live at `~/.claude/skills/[skill-name]/SKILL.md`.
 
-**Agent self-selection rule:** Read the Role and What It Does columns below.
-When a user's request matches a command's domain, load that skill file and
-follow its protocol. Do not wait to be told — route autonomously.
+**Progressive disclosure principle:** This section gives you just enough to route
+correctly. Full protocol lives in each skill file. Read the skill file when you
+need depth — not before.
 
-**Progressive disclosure principle:** This section gives you just enough to
-route correctly. Full protocol lives in each skill file. Read the skill file
-when you need depth, not before.
+**Agent self-selection rule:** Match the user's request to a skill group below.
+Load that skill file. Follow its protocol. Do not wait to be told — route autonomously.
+Signal every invocation:
+
+```
+→ Routing to [skill-name] — [one-line reason].
+  Loading ~/.claude/skills/[skill-name]/SKILL.md
+```
 
 ---
 
-### Command Reference
+### H.1 — AUTO-FIRE MANDATORIES (Always On — No Invocation Required)
+
+These three skills fire automatically whenever their trigger phrase appears.
+**This is non-negotiable.** No explicit command needed from the user.
+
+| Skill | Trigger Phrase(s) | What It Does |
+|---|---|---|
+| `token-budget-advisor` | "token budget", "token count", "token limit", "running out of tokens", "context window" | Advises on token management and context window optimisation |
+| `blueprint` | "plan", "blueprint", "roadmap" for any complex multi-PR or multi-session work | Turns a 1-line objective into a step-by-step multi-session build plan with dep graph, adversarial review, parallel step detection |
+| `security-review` | "auth", "authentication", "user input", "API endpoint", "payment", "secrets", "credentials", "help me make sure there are no security flaws", "check for vulnerabilities" | Universal security checklist: OWASP Top 10, input validation, secrets management, auth flows |
+
+**Auto-fire rule:** If trigger appears in any message, load and run that skill
+before proceeding with the primary task. Do not skip. Do not ask permission.
+
+---
+
+### H.2 — SKILL GROUP: CORE / AUTONOMOUS
+
+| Skill | Trigger | What It Does |
+|---|---|---|
+| `autonomous-loops` | **"recursive verification loop"** (any mention) | Patterns for autonomous Claude Code loops — sequential pipelines to full multi-agent DAG systems. **Route ALL agents here every time the user says "recursive verification loop".** |
+| `blueprint` | "plan", "blueprint", "roadmap" for complex multi-PR work | Turns a 1-line objective into a multi-session build plan with dependency graph, adversarial review gate, parallel step detection, and anti-pattern catalog |
+| `nanoclaw-repl` | Invoke by name / "NanoClaw" (ECC plugin) | Operates NanoClaw v2 REPL — zero-dependency, session-aware REPL operations |
+| `team-builder` | "orchestrate", "orchestrated", "compose agents", "parallel team", "build a team of agents" | Interactive agent picker to compose and dispatch parallel agent teams |
+
+---
+
+### H.3 — SKILL GROUP: RESEARCH & INTELLIGENCE
+
+**Group trigger name: "Search Research Intelligence Analyst"**
+
+When the user requests research, lookup, or intelligence gathering, select the right
+skill below based on scope and depth. Do not default to one — match the task.
+
+| Skill | Load When... | Needs |
+|---|---|---|
+| `deep-research` | "research X in depth", thorough multi-source research, citation-heavy requests | Firecrawl + Exa MCPs |
+| `exa-search` | "search for", "look up", "find" — web / company / person / code | Exa MCP configured |
+| `market-research` | "market research", "competitor analysis", "industry intel", "market sizing", "due diligence" | Source access |
+| `search-first` | Research-before-coding requests — find libraries and tools before any implementation | Nothing |
+| `skill-stocktake` | "audit skills", "stocktake", quality audit of installed Claude skills | `$PWD/.claude/skills` |
+
+**Routing logic (in order):** Match scope first (web lookup → `exa-search`), then depth
+(multi-source deep dive → `deep-research`), then business context (market intel →
+`market-research`), then pre-coding discovery (`search-first`).
+
+---
+
+### H.4 — SKILL GROUP: SECURITY
+
+**Group trigger words:** "security", "secure", "safe", "auth", "authentication",
+"help me make sure there are no security flaws", "check for vulnerabilities",
+"injection", "CSRF", "XSS", "rate limiting", "secrets"
+
+When any security trigger appears, load `security-review` first (universal), then
+layer the framework-specific skill on top if the project uses that stack.
+
+| Skill | Load When... |
+|---|---|
+| `security-review` | **Any project** — universal checklist: auth, input, secrets, APIs, payments |
+| `security-scan` | "scan security", "check my claude config" — scans `.claude/` for injection risks and misconfigs |
+| `django-security` | Django project — CSRF, SQL injection, XSS, auth |
+| `laravel-security` | Laravel project — validation, CSRF, mass assignment, file uploads |
+| `springboot-security` | Spring Boot project — authn/authz, CSRF, secrets, rate limiting |
+| `perl-security` | Perl project — taint mode, parameterised queries, web security |
+
+**Routing logic:** Always start with `security-review`. Stack framework skill on top
+when the project uses Django / Laravel / Spring Boot / Perl.
+
+---
+
+### H.5 — SKILL GROUP: LANGUAGE & FRAMEWORK PATTERNS
+
+**Routing principle — Minimum Trigger Approach:**
+Agent adopts the skill matching the project's detected language or framework.
+Trigger words are minimal. Context is the primary router.
+If the user mentions a framework, a file extension, or a concept native to that
+stack — load the matching skill. Do not wait to be named.
+
+| Skill | Triggers (context + keywords) | Needs |
+|---|---|---|
+| `android-clean-architecture` | Android project, KMP, UseCases, Repositories, Clean Architecture | Android / KMP project |
+| `api-design` | REST API, "design an API", naming / versioning / pagination / status codes | Any project |
+| `backend-patterns` | Node.js, Express, Next.js API routes, DB optimisation, server-side | Any project |
+| `coding-standards` | TypeScript, JavaScript, React, Node — universal quality standards | Any project |
+| `compose-multiplatform-patterns` | Jetpack Compose, KMP, StateFlow, navigation, theming | Kotlin / KMP project |
+| `cpp-coding-standards` | "C++ code", writing C++, `.cpp` / `.hpp` files, C++ Core Guidelines | C++ project |
+| `django-patterns` | Django project, DRF, ORM, signals, caching | Django project |
+| `docker-patterns` | Docker, Compose, containers, multi-service networking | Docker installed |
+| `frontend-patterns` | React, Next.js, state management, UI performance, components | Any project |
+| `golang-patterns` | Go project, idiomatic Go, goroutines, error handling, `go.mod` | Go project |
+| `java-coding-standards` | Java project, Optional, streams, Spring naming conventions | Java project |
+| `jpa-patterns` | JPA, Hibernate, entity relationships, Spring Boot + DB | Spring Boot + JPA |
+| `kotlin-coroutines-flows` | Kotlin coroutines, Flow, StateFlow, structured concurrency | Kotlin project |
+| `kotlin-exposed-patterns` | Exposed ORM, HikariCP, Flyway, repository pattern | Kotlin + Exposed |
+| `kotlin-ktor-patterns` | Ktor, Koin DI, WebSockets, routing plugins | Ktor project |
+| `kotlin-patterns` | Kotlin, null safety, DSL builders, coroutines — idiomatic Kotlin | Kotlin project |
+| `laravel-patterns` | Laravel, Eloquent, service layers, queues, caching | Laravel project |
+| `mcp-server-patterns` | "build MCP server", "add MCP tool", Node / TS SDK | Node / TS SDK |
+| `perl-patterns` | Perl 5.36+, modern Perl idioms, best practices | Perl project |
+| `postgres-patterns` | PostgreSQL, query optimisation, indexing, Supabase | PostgreSQL project |
+| `python-patterns` | Python project, Pythonic idioms, PEP 8, type hints | Python project |
+| `rust-patterns` | Rust, Cargo, ownership, error handling, traits, concurrency | Rust / Cargo project |
+| `springboot-patterns` | Spring Boot, REST, layered services, data access, caching | Spring Boot project |
+| `swiftui-patterns` | SwiftUI, `@Observable`, navigation, iOS / macOS UI | Xcode / Swift project |
+| `swift-actor-persistence` | Swift, thread-safe persistence, actor isolation | Swift project |
+| `swift-concurrency-6-2` | Swift 6.2+, `MainActor` default, `@concurrent` | Swift 6.2+ / Xcode |
+| `swift-protocol-di-testing` | Swift DI, protocol mocking, testable Swift, "need to test error handling" | Swift project |
+
+---
+
+### H.6 — GSTACK SPECIALIST SLASH COMMANDS
+
+These specialist agents remain active alongside all skill groups above.
+Stack them with any group skill when depth is needed.
 
 | Slash Command | Role | What It Does | Load When... |
 |---|---|---|---|
-| `/office-hours` | YC Partner | Runs 6 forcing questions to reframe your product — cuts to the real problem | Product strategy, pivots, validating ideas |
-| `/autoplan` | Pipeline Director | Runs the full CEO → Design → Engineering review pipeline automatically with auto-decisions | Complex multi-angle plans needing all three lenses at once |
-| `/plan-ceo-review` | CEO / Founder | Challenges assumptions, hunts for the 10-star version of the product | Early planning, "should we build this?" gates |
-| `/plan-eng-review` | Engineering Manager | Reviews architecture, data flow, and edge cases — catches design flaws before code | Pre-build engineering review, API or schema decisions |
-| `/plan-design-review` | Senior Designer | Scores the design 0–10, then edits the plan to reach the target score | UI/UX decisions, design direction reviews |
-| `/review` | Staff Engineer | Finds bugs that pass CI but blow up in production — focuses on real-world failure modes | Post-implementation code review, pre-merge checks |
-| `/cso` | Chief Security Officer | OWASP Top 10 + STRIDE threat modelling — zero false positives, zero noise | Any code touching auth, user data, APIs, payments |
-| `/qa` | QA Lead | Test → fix → re-verify loop until the feature is actually verified working | End-to-end feature verification, regression testing |
-| `/investigate` | Debugger | Root-cause diagnosis before any fix — never patches symptoms | Bug reports, unexpected behaviour, production incidents |
-| `/ship` | Release Engineer | Sync branches, run tests, push to remote, open PR — full release checklist | Ready-to-ship code, production deployments |
-| `/retro` | Engineering Manager | Structured weekly retrospective — what worked, what broke, what changes next week | Post-sprint reviews, team improvement sessions |
-| `/design-shotgun` | Design Explorer | Generates 4–6 design variants with taste memory — fast exploration before committing | Early design exploration, UI direction decisions |
+| `/office-hours` | YC Partner | 6 forcing questions to reframe your product — cuts to the real problem | Product strategy, pivots, validating ideas |
+| `/autoplan` | Pipeline Director | Full CEO → Design → Engineering review pipeline with auto-decisions | Complex plans needing all three lenses at once |
+| `/plan-ceo-review` | CEO / Founder | Challenges assumptions, hunts for the 10-star version | Early planning, "should we build this?" gates |
+| `/plan-eng-review` | Engineering Manager | Architecture, data flow, edge cases — catches design flaws before code | Pre-build reviews, API or schema decisions |
+| `/plan-design-review` | Senior Designer | Scores design 0–10, edits plan to reach target score | UI/UX decisions, design direction reviews |
+| `/review` | Staff Engineer | Bugs that pass CI but blow up in production | Post-implementation review, pre-merge checks |
+| `/cso` | Chief Security Officer | OWASP Top 10 + STRIDE — zero false positives, zero noise | Any code touching auth, user data, APIs, payments |
+| `/qa` | QA Lead | Test → fix → re-verify loop until feature is verified working | Feature verification, regression testing |
+| `/investigate` | Debugger | Root-cause diagnosis before any fix — never patches symptoms | Bug reports, unexpected behaviour, incidents |
+| `/ship` | Release Engineer | Sync branches, run tests, push to remote, open PR | Ready-to-ship code, production deployments |
+| `/retro` | Engineering Manager | Structured weekly retrospective | Post-sprint reviews, team improvement sessions |
+| `/design-shotgun` | Design Explorer | 4–6 design variants with taste memory — fast exploration | Early design exploration, UI direction decisions |
 | `/design-html` | Design Engineer | Converts design mockups into production-quality HTML/CSS | Turning designs into real code, component builds |
-| `/learn` | Teacher | Explains what changed this session using diagrams and plain language | After complex changes, when onboarding needs context |
-| `/careful` | Safety Guardrail | Intercepts destructive commands (rm -rf, DROP TABLE, force-push) and warns before executing | Production environments, shared systems, risky operations |
-| `/codex` | Second-Opinion Engine | Three modes: Review (independent diff critique), Challenge (adversarial break attempt), Consult (session-aware Q&A) | Independent code review, adversarial testing, architecture consultation |
+| `/learn` | Teacher | Explains changes using diagrams and plain language | After complex changes, onboarding needs context |
+| `/careful` | Safety Guardrail | Intercepts destructive commands and warns before executing | Production environments, shared systems, risky ops |
+| `/codex` | Second-Opinion Engine | Review (diff critique), Challenge (adversarial), Consult (session Q&A) | Independent review, adversarial testing, consultation |
 
 ---
 
 ### How Agents Use This Section
 
-1. **Match the request** — read Role + What It Does for each command.
-2. **Load the skill file** — full protocol at `~/.claude/skills/[skill-name]/SKILL.md`.
-3. **Run the skill's protocol** — do not improvise the process from the table above.
-4. **Stack commands when needed** — `/cso` + `/plan-eng-review` for a secure API;
-   `/investigate` + `/qa` for a bug that needs root-cause before verification.
+1. **Check H.1 auto-fire triggers first** — token-budget / blueprint / security
+   auto-fire rules always run before anything else.
+2. **Match the skill group** — route to H.2–H.6 based on the user's context.
+3. **Load the skill file** — full protocol at `~/.claude/skills/[skill-name]/SKILL.md`.
+4. **Run the skill's protocol** — do not improvise from this table.
+5. **Stack skills when needed:**
+   - `security-review` + `django-security` → Django auth feature
+   - `deep-research` + `blueprint` → new product with unknown landscape
+   - `team-builder` + `autonomous-loops` → multi-agent recursive pipeline
+   - `/cso` + `/plan-eng-review` → secure API design
+   - `/investigate` + `/qa` → root-cause then verify fix
 
 ### Freedom to Self-Invoke
 
-Agents have full permission to bring in any slash command from this section
-**without waiting for explicit instruction** when the command's domain clearly
+Agents have full permission to bring in any skill from this section
+**without waiting for explicit instruction** when the skill's domain clearly
 matches the user's request. Signal the invocation:
 
 ```
-→ Routing to /cso — your request touches authentication code.
-  Loading ~/.claude/skills/cso/SKILL.md
+→ Routing to [skill-name] — [one-line reason].
+  Loading ~/.claude/skills/[skill-name]/SKILL.md
 ```
 
 This autonomy is granted here and applies for the entire session.
