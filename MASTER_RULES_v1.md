@@ -2,8 +2,13 @@
 # Behavioral Standard — All Projects, All Tools
 # Base: Karpathy-Inspired Coding Principles
 # Additions: Multi-Agent Pipelines | Session Memory | Override Protection
-# Version: 1.0 — May 2026
+# Version: 1.1 — May 2026
 # Owner: Koo — Non-technical AI venture builder, Singapore
+#
+# CHANGELOG
+# v1.1 (2 May 2026) — Fixed Kimi Code config path; added sync-channels.ps1;
+#                    all 4 channels verified and re-synced.
+# v1.0 (May 2026)   — Initial release.
 
 ---
 
@@ -482,9 +487,16 @@ This file is the single source of truth. Each tool below is hardwired to load
 | Claude Code | `CLAUDE.md` | `~\.claude\CLAUDE.md` |
 | Codex (OpenAI) | `AGENTS.md` | `~\.codex\AGENTS.md` |
 | Roo Code | `master-rules-v1.md` | `~\.roo\rules\master-rules-v1.md` |
-| Kimi Code | `.kimi-rules.md` | `~\.kimi-rules.md` (global) |
+| Kimi Code | `AGENTS.md` | `~\.kimi\AGENTS.md` |
 
 **To re-activate in any session:** type `apply master rules v1`
+
+**To sync all loader files after editing this file:**
+```powershell
+& ~/master-rules/sync-channels.ps1
+```
+This script regenerates the loader stub in every channel above from a single
+template, ensuring all tools always point to the latest version of this file.
 
 ---
 
@@ -501,6 +513,8 @@ from the repo.
 
 Whenever `MASTER_RULES_v1.md` is modified — by any agent, in any tool — the
 agent MUST end its response with this block before closing:
+
+> Also run `sync-channels.ps1` if any loader file templates changed.
 
 ```
 ⚠️  MASTER_RULES_v1.md SYNC REQUIRED
