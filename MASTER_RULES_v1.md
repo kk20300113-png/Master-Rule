@@ -6,6 +6,13 @@
 # Owner: Koo — Non-technical AI venture builder, Singapore
 #
 # CHANGELOG
+# v1.6 (3 May 2026) — Mem0 deployed to hosted platform (Option A); security
+#                    guardrails added to mem0 skill file (DENYLIST, sanitization
+#                    checklist, post-store audit, credential rotation); H.1 mem0
+#                    warm-up updated with security pre-check pointer; H.8
+#                    slimmed to router-only (details in skill file); Section I
+#                    security boundary table added; .gitignore created with .env
+#                    protection; all 5 IDE channels to be re-synced.
 # v1.5 (3 May 2026) — mem0 added as 5th H.1 auto-fire mandatory alongside
 #                    planning-with-files; Section H.8 (Persistent Memory) added;
 #                    Section I (Complementary Memory Workflow) added explaining
@@ -619,7 +626,9 @@ These skills fire automatically. **Non-negotiable.** No explicit command needed.
 **Session-start rule (planning-with-files + mem0):**
 At the start of EVERY session, in EVERY tool:
 1. **Planning-with-files protocol**: Check if `task_plan.md` exists — if yes, read it plus `progress.md` and `findings.md` immediately. If none exist and the task is multi-step (3+ steps): create all three files before doing anything else.
-2. **Mem0 warm-up protocol**: Query Mem0 for user context — retrieve recent preferences, decisions, and domain knowledge for the current user. Inject retrieved memories into agent context. Signal: "Loaded N memories from Mem0."
+2. **Mem0 warm-up protocol** (with security pre-check — see `~/.claude/skills/mem0/SKILL.md` § Security Guardrails):
+   - Query Mem0 for user context, scan retrieved memories for DENYLIST patterns, inject clean memories.
+   - Signal: "Loaded N memories from Mem0 for user koo [security: CLEAN]".
 3. Re-read `task_plan.md` before every major decision to keep goals in context.
 4. After every 2 view/search/browser operations: write findings to `findings.md`.
 5. At session end: update `progress.md` with what was done and the exact next step; store key learnings to Mem0.
@@ -771,37 +780,20 @@ Only invoke paid API credentials when browser access is insufficient or rate-lim
 "long-term memory", "user memory", "agent memory", "persistent memory",
 "what did I say before", "recall", "don't forget"
 
-**What it is:** Mem0 is a persistent memory layer that stores user preferences,
-past decisions, and domain knowledge across all sessions, all agents, and all users.
-It complements `planning-with-files` (task-level memory) with long-term agent
-intelligence (CRM + personal knowledge base layer).
+**What it is:** Persistent cross-session memory layer (Vector DB + Graph DB + Key-Value DB).
+Complements `planning-with-files` with long-term agent intelligence.
 
-**When to use:**
-- At every session start (auto-fire alongside planning-with-files)
-- When a user preference is discovered (store it)
-- When cross-session context is needed ("what did we decide about X last week?")
-- When multiple agents need shared user context
+**Deployment:** Hosted Platform (Option A) at app.mem0.ai. API key in environment.
 
-**Deployment:**
-- **Option A — Hosted Platform (recommended):** Sign up at app.mem0.ai, get API key.
-  No infrastructure. Managed Vector DB + Graph DB + Key-Value DB in the cloud.
-- **Option B — Self-hosted:** `pip install mem0ai`, run Qdrant locally, configure LLM provider.
-  For full data control. Add Neo4j optionally for relationship-heavy use cases.
+**Skill path:** `~/.claude/skills/mem0/SKILL.md` — contains full protocol, core operations,
+security guardrails (DENYLIST, sanitization checklist, post-store audit, credential rotation),
+and complementary workflow with planning-with-files.
 
-**Core operations:**
-```python
-from mem0 import MemoryClient
-client = MemoryClient(api_key=os.environ["MEM0_API_KEY"])
-
-# Store
-client.add(messages=[{"role": "user", "content": "..."}], user_id="koo")
-
-# Retrieve
-memories = client.search(query="user preferences", user_id="koo")
-```
-
-**Skill path:** `~/.claude/skills/mem0/SKILL.md`
 **Plugin repo:** [github.com/mem0ai/mem0](https://github.com/mem0ai/mem0)
+
+**Security rule:** See skill file § Security Guardrails. NEVER store API keys, passwords,
+government IDs, financial instruments, personal file paths, or raw conversation logs.
+If credential exposure suspected: rotate immediately, delete memory, log incident.
 
 ---
 
@@ -951,17 +943,18 @@ At the end of EVERY session:
 
 ### Installation for Elephant Gin / CarbonIQ Projects
 
-**Recommended: Option A — Hosted Platform**
-1. Sign up at [app.mem0.ai](https://app.mem0.ai)
-2. Get API key → store as `MEM0_API_KEY` in environment
-3. Install Claude plugin from [github.com/mem0ai/mem0](https://github.com/mem0ai/mem0)
-4. No infrastructure needed — Mem0 manages Vector DB + Graph DB + Key-Value DB
+Deployed: Option A — Hosted Platform at app.mem0.ai. See `~/.claude/skills/mem0/SKILL.md` for full setup and security guardrails.
 
-**Only if data control is mandatory: Option B — Self-hosted**
-- `pip install mem0ai`
-- Run Qdrant locally: `docker run -p 6333:6333 qdrant/qdrant`
-- Configure LLM provider in `config.py`
-- Optional: add Neo4j for relationship-heavy use cases
+### Security Boundary
+
+| Memory Layer | Domain | What Lives Here |
+|---|---|---|
+| planning-with-files | **LOCAL ONLY** | Task plans, build progress, research findings |
+| Mem0 | **CLOUD** (app.mem0.ai, encrypted) | Preferences, decisions, domain knowledge (SANITIZED) |
+| Copilot /memories/ | **LOCAL ONLY** | Project execution plans, runbooks |
+| `.env` files | **LOCAL ONLY** — NEVER in any memory system | API keys, credentials |
+
+**Rule:** If it unlocks an account → `.env`. If it describes how you work → Mem0 (after sanitization).
 
 ---
 
